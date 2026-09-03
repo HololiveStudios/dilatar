@@ -1,9 +1,9 @@
-/**
+﻿/**
  * OftalmoFlow - Service Worker (sw.js)
  * Estratégia de Caching Offline-First para Clínica Oftalmológica
  */
 
-const CACHE_NAME = 'oftalmoflow-cache-v1';
+const CACHE_NAME = 'oftalmoflow-cache-v2';
 
 // Recursos críticos a serem pré-cacheados na instalação
 const PRECACHE_ASSETS = [
@@ -11,6 +11,10 @@ const PRECACHE_ASSETS = [
   '/index.html',
   '/manifest.json',
   '/icon.svg',
+  '/pwa-192x192.png',
+  '/pwa-512x512.png',
+  '/pwa-maskable-512x512.png',
+  '/apple-touch-icon.png',
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
@@ -22,7 +26,7 @@ self.addEventListener('install', (event) => {
       .then((cache) => {
         console.log('[Service Worker] Pré-cacheando recursos essenciais');
         return cache.addAll(PRECACHE_ASSETS).catch((err) => {
-          console.warn('[Service Worker] Falha ao pré-cachear alguns itens CDN:', err);
+          console.warn('[Service Worker] Falha ao pré-cachear alguns itens:', err);
         });
       })
       .then(() => self.skipWaiting())
@@ -54,7 +58,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 1. Requisições de navegação HTML (Página inicial) -> Network First com fallback para Cache
+  // 1. Requisições de navegação HTML -> Network First com fallback para Cache
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -73,7 +77,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. CDNs externos (Tailwind, FontAwesome, Google Fonts, Web Fonts) -> Cache First
+  // 2. CDNs externos e Fontes -> Cache First
   if (
     url.hostname.includes('tailwindcss.com') ||
     url.hostname.includes('cdnjs.cloudflare.com') ||
@@ -95,7 +99,6 @@ self.addEventListener('fetch', (event) => {
           }
           return networkResponse;
         }).catch(() => {
-          // Se falhar e não estiver em cache, retorna resposta vazia amigável
           return new Response('', { status: 408, headers: { 'Content-Type': 'text/plain' } });
         });
       })

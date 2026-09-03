@@ -2,19 +2,28 @@
 <html lang="pt-BR" class="h-full bg-slate-100">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>OftalmoFlow - Fluxo de Pacientes</title>
   <meta name="description" content="Sistema ultracompacto para controle de fluxo e dilatação de pacientes em clínicas oftalmológicas.">
   
-  <!-- PWA Settings -->
+  <!-- PWA Settings & App Installation -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0d9488">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="OftalmoFlow">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="application-name" content="OftalmoFlow">
+  <meta name="msapplication-TileColor" content="#0d9488">
+
+  <!-- Ícones PWA e Favicons -->
   <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/pwa-512x512.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/pwa-192x192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/pwa-512x512.png">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -48,6 +57,13 @@
     button, input, select {
       touch-action: manipulation;
     }
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
 <body class="h-full bg-slate-100 text-slate-800 antialiased flex flex-col font-sans select-none md:select-auto">
@@ -72,14 +88,16 @@
 
         <!-- Ações do Header -->
         <div class="flex items-center gap-2">
-          <!-- Botão Instalar PWA (quando disponível) -->
-          <button id="btnInstallPwa" class="hidden items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold shadow-sm transition active:scale-95">
-            <i class="fa-solid fa-download text-xs"></i>
-            <span class="hidden sm:inline">Instalar</span>
+          
+          <!-- Botão Instalar PWA -->
+          <button id="btnInstallPwa" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-cloud-arrow-down text-brand-400"></i>
+            <span class="hidden sm:inline">Instalar App</span>
+            <span class="sm:hidden">Instalar</span>
           </button>
 
           <!-- Botão "+ Novo Paciente" BEM VISÍVEL -->
-          <button id="btnOpenModalNovo" class="flex items-center gap-1.5 px-3.5 py-1.5 sm:py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95">
+          <button id="btnOpenModalNovo" class="flex items-center gap-1.5 px-3.5 py-1.5 sm:py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer">
             <i class="fa-solid fa-plus text-xs sm:text-sm"></i>
             <span>Novo Paciente</span>
           </button>
@@ -105,7 +123,7 @@
           <span class="w-2 h-2 rounded-full bg-slate-400"></span> Finalizados: <strong id="countFinalizados" class="text-slate-700">0</strong>
         </span>
       </div>
-      <button id="btnLimparFinalizados" class="text-slate-400 hover:text-rose-600 text-[11px] font-medium transition flex items-center gap-1">
+      <button id="btnLimparFinalizados" class="text-slate-400 hover:text-rose-600 text-[11px] font-medium transition flex items-center gap-1 cursor-pointer">
         <i class="fa-regular fa-trash-can"></i> Limpar Concluídos
       </button>
     </div>
@@ -127,7 +145,7 @@
   </main>
 
   <!-- ========================================== -->
-  <!-- MODAL: NOVO PACIENTE (SIMPLIFICADO)        -->
+  <!-- MODAL: NOVO PACIENTE (COMPACTO & INTELIGENTE) -->
   <!-- ========================================== -->
   <div id="modalNovoPaciente" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 overflow-y-auto">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 my-auto animate-in fade-in zoom-in duration-150">
@@ -135,76 +153,210 @@
       <div class="bg-brand-600 px-4 py-3 text-white flex items-center justify-between">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-user-plus text-sm"></i>
-          <h2 class="text-sm font-bold">Novo Paciente</h2>
+          <h2 class="text-sm font-bold">Novo Atendimento</h2>
         </div>
-        <button id="btnCloseModalNovo" class="text-white/80 hover:text-white p-1 rounded-lg">
+        <button id="btnCloseModalNovo" class="text-white/80 hover:text-white p-1 rounded-lg cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
       <form id="formNovoPaciente" class="p-4 flex flex-col gap-3 text-xs sm:text-sm">
         
-        <!-- Nome -->
-        <div>
-          <label for="novoNome" class="block font-semibold text-slate-700 mb-1">Nome do Paciente *</label>
-          <input type="text" id="novoNome" required placeholder="Ex: Maria de Souza" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none">
-        </div>
-
-        <!-- Idade -->
-        <div>
-          <label for="novoIdade" class="block font-semibold text-slate-700 mb-1">Idade (anos) *</label>
-          <input type="number" id="novoIdade" min="0" max="130" required placeholder="Ex: 52" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none">
-        </div>
-
-        <!-- Tipo de Atendimento -->
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Tipo de Atendimento *</label>
-          <div class="grid grid-cols-3 gap-2">
-            
-            <label class="flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-brand-500 bg-brand-50 cursor-pointer text-center" id="labelTipoConsulta">
-              <input type="radio" name="novoTipo" value="consulta" checked class="sr-only" onchange="window.toggleTipoNovo()">
-              <i class="fa-solid fa-user-doctor text-brand-600 text-sm mb-0.5"></i>
-              <span class="font-bold text-slate-900 text-xs">Consulta</span>
-              <span class="text-[10px] text-slate-500">Pré-Exame</span>
-            </label>
-
-            <label class="flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer text-center" id="labelTipoExame">
-              <input type="radio" name="novoTipo" value="exame" class="sr-only" onchange="window.toggleTipoNovo()">
-              <i class="fa-solid fa-microscope text-amber-500 text-sm mb-0.5"></i>
-              <span class="font-bold text-slate-900 text-xs">Exame</span>
-              <span class="text-[10px] text-slate-500">Diagnóstico</span>
-            </label>
-
-            <label class="flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer text-center" id="labelTipoRetorno">
-              <input type="radio" name="novoTipo" value="retorno" class="sr-only" onchange="window.toggleTipoNovo()">
-              <i class="fa-solid fa-stethoscope text-indigo-500 text-sm mb-0.5"></i>
-              <span class="font-bold text-slate-900 text-xs">Retorno</span>
-              <span class="text-[10px] text-slate-500">Médico</span>
-            </label>
-
+        <!-- Nome e Idade lado a lado -->
+        <div class="grid grid-cols-3 gap-2">
+          <div class="col-span-2">
+            <label for="novoNome" class="block font-semibold text-slate-700 mb-1 text-xs">Nome do Paciente *</label>
+            <input type="text" id="novoNome" required placeholder="Ex: Maria de Souza" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-xs sm:text-sm">
+          </div>
+          <div>
+            <label for="novoIdade" class="block font-semibold text-slate-700 mb-1 text-xs">Idade (anos) *</label>
+            <input type="number" id="novoIdade" min="0" max="130" required placeholder="Ex: 52" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-xs sm:text-sm">
           </div>
         </div>
 
-        <!-- Seletor opcional para Exames -->
-        <div id="boxOpcaoExame" class="hidden bg-amber-50 p-2.5 rounded-xl border border-amber-200 flex flex-col gap-1">
-          <label for="novoExameNome" class="font-semibold text-amber-900 text-xs">Exame a ser realizado:</label>
-          <select id="novoExameNome" class="w-full px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs focus:outline-none focus:ring-1 focus:ring-amber-500">
-            <option value="OCT (Tomografia)">OCT (Tomografia de Coerência)</option>
-            <option value="Campo Visual">Campo Visual Computadorizado</option>
-            <option value="Topografia Corneana">Topografia Corneana</option>
-            <option value="Mapeamento de Retina">Mapeamento de Retina</option>
-            <option value="Paquimetria">Paquimetria Ultrassônica</option>
-            <option value="Biometria">Biometria Ultrassônica</option>
-            <option value="Outro Exame">Outro Exame Diagnóstico</option>
-          </select>
+        <!-- Tipo de Atendimento (Grid Ultra-Compacto 4x2) -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="font-semibold text-slate-700 text-xs">Tipo de Atendimento *</label>
+            <span class="text-[10px] text-slate-400">Selecione uma opção</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5" id="gridTiposNovo">
+            
+            <!-- 1. Consulta -->
+            <button type="button" data-tipo="consulta" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-brand-50 border-brand-500 text-brand-900 font-bold shadow-xs cursor-pointer">
+              <i class="fa-solid fa-user-doctor text-brand-600 text-xs shrink-0"></i>
+              <span class="truncate">Consulta</span>
+            </button>
+
+            <!-- 2. Retorno -->
+            <button type="button" data-tipo="retorno" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">
+              <i class="fa-solid fa-stethoscope text-indigo-500 text-xs shrink-0"></i>
+              <span class="truncate">Retorno</span>
+            </button>
+
+            <!-- 3. Exame -->
+            <button type="button" data-tipo="exame" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">
+              <i class="fa-solid fa-microscope text-amber-500 text-xs shrink-0"></i>
+              <span class="truncate">Exame</span>
+            </button>
+
+            <!-- 4. Caps (Laser) -->
+            <button type="button" data-tipo="caps" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">
+              <i class="fa-solid fa-eye text-teal-600 text-xs shrink-0"></i>
+              <span class="truncate">Caps</span>
+            </button>
+
+            <!-- 5. Pós Refrativa -->
+            <button type="button" data-tipo="pos_refrativa" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">
+              <i class="fa-solid fa-glasses text-purple-600 text-xs shrink-0"></i>
+              <span class="truncate">Pós Refrat.</span>
+            </button>
+
+            <!-- 6. Pós Caps -->
+            <button type="button" data-tipo="pos_caps" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">
+              <i class="fa-solid fa-bullseye text-cyan-600 text-xs shrink-0"></i>
+              <span class="truncate">Pós Caps</span>
+            </button>
+
+            <!-- 7. Pós Reabordagem -->
+            <button type="button" data-tipo="pos_reabordagem" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">
+              <i class="fa-solid fa-rotate text-rose-500 text-xs shrink-0"></i>
+              <span class="truncate">Reabord.</span>
+            </button>
+
+            <!-- 8. Pós PTG -->
+            <button type="button" data-tipo="pos_ptg" class="btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">
+              <i class="fa-solid fa-shield-halved text-emerald-600 text-xs shrink-0"></i>
+              <span class="truncate">Pós PTG</span>
+            </button>
+
+          </div>
+          <input type="hidden" id="novoTipo" value="consulta">
         </div>
 
-        <!-- Botões -->
+        <!-- ========================================== -->
+        <!-- CONTAINER CONDICIONAL (SÓ APARECE QUANDO SELECIONAR) -->
+        <!-- ========================================== -->
+        <div id="boxInfoExtraTipo" class="hidden rounded-xl border p-2.5 transition-all">
+          
+          <!-- Caso EXAME -->
+          <div id="subBoxExame" class="hidden flex-col gap-1">
+            <label for="novoExameNome" class="font-bold text-amber-900 text-xs flex items-center gap-1">
+              <i class="fa-solid fa-microscope text-amber-600"></i> Exame a ser realizado:
+            </label>
+            <select id="novoExameNome" class="w-full px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs focus:outline-none focus:ring-1 focus:ring-amber-500">
+              <option value="OCT (Tomografia)">OCT (Tomografia de Coerência Óptica)</option>
+              <option value="Campo Visual">Campo Visual Computadorizado</option>
+              <option value="Topografia Corneana">Topografia Corneana (Ceratoscopia)</option>
+              <option value="Mapeamento de Retina">Mapeamento de Retina</option>
+              <option value="Paquimetria">Paquimetria Ultrassônica</option>
+              <option value="Biometria">Biometria Ultrassônica</option>
+              <option value="Microscopia Especular">Microscopia Especular</option>
+              <option value="Outro Exame">Outro Exame Diagnóstico</option>
+            </select>
+          </div>
+
+          <!-- Caso PÓS REFRATIVA (Período) -->
+          <div id="subBoxPosRefrativa" class="hidden flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-bold text-purple-900 text-xs flex items-center gap-1">
+                <i class="fa-solid fa-calendar-day text-purple-600"></i> Período Pós Refrativa:
+              </label>
+              <span class="text-[10px] text-purple-700">Clique ou digite</span>
+            </div>
+            <div class="flex flex-wrap gap-1" id="chipsPeriodoRefrativa">
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="D1">D1</button>
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="D3">D3</button>
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="D7">D7</button>
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="15 dias">15 dias</button>
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="1 mês">1 mês</button>
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="3 meses">3 meses</button>
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="6 meses">6 meses</button>
+              <button type="button" class="chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer" data-val="1 ano">1 ano</button>
+            </div>
+            <input type="text" id="novoPeriodoRefrativa" placeholder="Ex: D1, D7 ou 1 mês" class="w-full px-2.5 py-1.5 rounded-lg border border-purple-300 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500">
+          </div>
+
+          <!-- Caso CAPS (Olhos: OD / OE / AO) -->
+          <div id="subBoxCaps" class="hidden flex-col gap-1.5">
+            <label class="font-bold text-teal-900 text-xs flex items-center gap-1">
+              <i class="fa-solid fa-eye text-teal-600"></i> Olho da Capsulotomia:
+            </label>
+            <div class="grid grid-cols-3 gap-1.5" id="groupOlhosCaps">
+              <button type="button" data-olho="OD" class="btn-olho-item py-1.5 rounded-lg border border-teal-300 bg-white text-teal-900 font-bold text-xs hover:bg-teal-50 cursor-pointer text-center">OD (Direito)</button>
+              <button type="button" data-olho="OE" class="btn-olho-item py-1.5 rounded-lg border border-teal-300 bg-white text-teal-900 font-bold text-xs hover:bg-teal-50 cursor-pointer text-center">OE (Esquerdo)</button>
+              <button type="button" data-olho="AO" class="btn-olho-item py-1.5 rounded-lg border border-teal-300 bg-white text-teal-900 font-bold text-xs hover:bg-teal-50 cursor-pointer text-center">AO (Ambos)</button>
+            </div>
+            <input type="hidden" id="novoCapsOlho" value="">
+          </div>
+
+          <!-- Caso PÓS CAPS (Período e Olho) -->
+          <div id="subBoxPosCaps" class="hidden flex-col gap-2">
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center justify-between">
+                <label class="font-bold text-cyan-900 text-xs flex items-center gap-1">
+                  <i class="fa-solid fa-calendar-day text-cyan-600"></i> Período Pós Caps:
+                </label>
+                <span class="text-[10px] text-cyan-700">Clique ou digite</span>
+              </div>
+              <div class="flex flex-wrap gap-1" id="chipsPeriodoPosCaps">
+                <button type="button" class="chip-periodo-caps px-2 py-0.5 rounded text-[11px] font-bold border border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-100 cursor-pointer" data-val="D1">D1</button>
+                <button type="button" class="chip-periodo-caps px-2 py-0.5 rounded text-[11px] font-bold border border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-100 cursor-pointer" data-val="D7">D7</button>
+                <button type="button" class="chip-periodo-caps px-2 py-0.5 rounded text-[11px] font-bold border border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-100 cursor-pointer" data-val="15 dias">15 dias</button>
+                <button type="button" class="chip-periodo-caps px-2 py-0.5 rounded text-[11px] font-bold border border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-100 cursor-pointer" data-val="30 dias">30 dias</button>
+              </div>
+              <input type="text" id="novoPeriodoPosCaps" placeholder="Ex: D1, D7 ou 30 dias" class="w-full px-2.5 py-1.5 rounded-lg border border-cyan-300 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-cyan-500">
+            </div>
+            
+            <div class="flex flex-col gap-1">
+              <label class="font-bold text-cyan-900 text-[11px]">Olho operado:</label>
+              <div class="grid grid-cols-3 gap-1.5" id="groupOlhosPosCaps">
+                <button type="button" data-olho="OD" class="btn-olho-poscaps py-1 rounded-lg border border-cyan-200 bg-white text-cyan-800 font-bold text-xs hover:bg-cyan-50 cursor-pointer text-center">OD</button>
+                <button type="button" data-olho="OE" class="btn-olho-poscaps py-1 rounded-lg border border-cyan-200 bg-white text-cyan-800 font-bold text-xs hover:bg-cyan-50 cursor-pointer text-center">OE</button>
+                <button type="button" data-olho="AO" class="btn-olho-poscaps py-1 rounded-lg border border-cyan-200 bg-white text-cyan-800 font-bold text-xs hover:bg-cyan-50 cursor-pointer text-center">AO</button>
+              </div>
+              <input type="hidden" id="novoPosCapsOlho" value="">
+            </div>
+          </div>
+
+          <!-- Caso PÓS PTG (Olho e Período) -->
+          <div id="subBoxPosPtg" class="hidden flex-col gap-2">
+            <div class="flex flex-col gap-1">
+              <label class="font-bold text-emerald-900 text-xs flex items-center gap-1">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i> Olho operado (Pterígio):
+              </label>
+              <div class="grid grid-cols-3 gap-1.5" id="groupOlhosPosPtg">
+                <button type="button" data-olho="OD" class="btn-olho-ptg py-1.5 rounded-lg border border-emerald-300 bg-white text-emerald-900 font-bold text-xs hover:bg-emerald-50 cursor-pointer text-center">OD (Direito)</button>
+                <button type="button" data-olho="OE" class="btn-olho-ptg py-1.5 rounded-lg border border-emerald-300 bg-white text-emerald-900 font-bold text-xs hover:bg-emerald-50 cursor-pointer text-center">OE (Esquerdo)</button>
+                <button type="button" data-olho="AO" class="btn-olho-ptg py-1.5 rounded-lg border border-emerald-300 bg-white text-emerald-900 font-bold text-xs hover:bg-emerald-50 cursor-pointer text-center">AO (Ambos)</button>
+              </div>
+              <input type="hidden" id="novoPosPtgOlho" value="">
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center justify-between">
+                <label class="font-bold text-emerald-900 text-[11px]">Período de pós-operatório:</label>
+                <span class="text-[10px] text-emerald-700">Clique ou digite</span>
+              </div>
+              <div class="flex flex-wrap gap-1" id="chipsPeriodoPosPtg">
+                <button type="button" class="chip-periodo-ptg px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-100 cursor-pointer" data-val="D1">D1</button>
+                <button type="button" class="chip-periodo-ptg px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-100 cursor-pointer" data-val="D7">D7</button>
+                <button type="button" class="chip-periodo-ptg px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-100 cursor-pointer" data-val="15 dias">15 dias</button>
+                <button type="button" class="chip-periodo-ptg px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-100 cursor-pointer" data-val="30 dias">30 dias</button>
+              </div>
+              <input type="text" id="novoPeriodoPosPtg" placeholder="Ex: D1, D7, 15 dias" class="w-full px-2.5 py-1.5 rounded-lg border border-emerald-300 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Botões de Ação do Modal -->
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 mt-1">
-          <button type="button" id="btnCancelModalNovo" class="px-3 py-2 rounded-xl border border-slate-300 text-slate-700 font-semibold text-xs hover:bg-slate-50">
+          <button type="button" id="btnCancelModalNovo" class="px-3 py-2 rounded-xl border border-slate-300 text-slate-700 font-semibold text-xs hover:bg-slate-50 cursor-pointer">
             Cancelar
           </button>
-          <button type="submit" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-sm flex items-center gap-1">
+          <button type="submit" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-sm flex items-center gap-1 cursor-pointer active:scale-95">
             <i class="fa-solid fa-check"></i> Iniciar Atendimento
           </button>
         </div>
@@ -217,14 +369,14 @@
   <!-- MODAL: EDITAR PACIENTE & TONOMETRIA        -->
   <!-- ========================================== -->
   <div id="modalEditarPaciente" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 overflow-y-auto">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 my-auto">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 my-auto animate-in fade-in zoom-in duration-150">
       
       <div class="bg-slate-800 px-4 py-3 text-white flex items-center justify-between">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-user-pen text-sm"></i>
           <h2 class="text-sm font-bold">Editar Paciente</h2>
         </div>
-        <button id="btnCloseModalEdit" class="text-white/80 hover:text-white p-1 rounded-lg">
+        <button id="btnCloseModalEdit" class="text-white/80 hover:text-white p-1 rounded-lg cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
@@ -234,12 +386,12 @@
 
         <div class="grid grid-cols-3 gap-2">
           <div class="col-span-2">
-            <label for="editNome" class="block font-semibold text-slate-700 mb-1">Nome Completo</label>
-            <input type="text" id="editNome" required class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-1 focus:ring-brand-500 focus:outline-none">
+            <label for="editNome" class="block font-semibold text-slate-700 mb-1 text-xs">Nome Completo</label>
+            <input type="text" id="editNome" required class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-1 focus:ring-brand-500 focus:outline-none text-xs sm:text-sm font-semibold">
           </div>
           <div>
-            <label for="editIdade" class="block font-semibold text-slate-700 mb-1">Idade</label>
-            <input type="number" id="editIdade" min="0" max="130" required class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-1 focus:ring-brand-500 focus:outline-none">
+            <label for="editIdade" class="block font-semibold text-slate-700 mb-1 text-xs">Idade</label>
+            <input type="number" id="editIdade" min="0" max="130" required class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-1 focus:ring-brand-500 focus:outline-none text-xs sm:text-sm font-semibold">
           </div>
         </div>
 
@@ -255,16 +407,17 @@
           </div>
         </div>
 
+        <!-- Ações do Modal de Edição -->
         <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-          <button type="button" id="btnExcluirPaciente" class="text-rose-600 hover:text-rose-700 font-semibold text-xs py-1 flex items-center gap-1">
+          <button type="button" id="btnExcluirPaciente" class="text-rose-600 hover:text-rose-700 font-semibold text-xs py-1 flex items-center gap-1 cursor-pointer">
             <i class="fa-regular fa-trash-can"></i> Excluir
           </button>
           <div class="flex items-center gap-2">
-            <button type="button" id="btnCancelModalEdit" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold">
+            <button type="button" id="btnCancelModalEdit" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer">
               Cancelar
             </button>
-            <button type="submit" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold">
-              Salvar
+            <button type="submit" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold cursor-pointer active:scale-95">
+              Salvar Alterações
             </button>
           </div>
         </div>
@@ -277,30 +430,81 @@
   <!-- MODAL RÁPIDO: FINALIZAR TONOMETRIA         -->
   <!-- ========================================== -->
   <div id="modalTonometriaRapida" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in duration-150">
       <div class="bg-emerald-600 px-4 py-3 text-white">
-        <h2 class="text-sm font-bold flex items-center gap-1.5"><i class="fa-solid fa-clipboard-check"></i> Finalizar Dilatação</h2>
-        <p class="text-[11px] text-emerald-100" id="rapidaPacienteNome"></p>
+        <h2 class="text-sm font-bold flex items-center gap-1.5"><i class="fa-solid fa-clipboard-check"></i> Finalizar Atendimento</h2>
+        <p class="text-[11px] text-emerald-100 truncate" id="rapidaPacienteNome"></p>
       </div>
 
       <form id="formTonometriaRapida" class="p-4 flex flex-col gap-3 text-xs sm:text-sm">
         <input type="hidden" id="rapidaPacienteId">
-        <label class="block font-semibold text-slate-700">Informe a Pressão Ocular (opcional):</label>
+        <label class="block font-semibold text-slate-700 text-xs">Informe a Pressão Ocular (opcional):</label>
         
         <div class="grid grid-cols-2 gap-2">
-          <input type="number" step="0.5" id="rapidaOD" placeholder="OD (mmHg)" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-bold focus:outline-none focus:ring-1 focus:ring-emerald-500">
-          <input type="number" step="0.5" id="rapidaOE" placeholder="OE (mmHg)" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-bold focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <input type="number" step="0.5" id="rapidaOD" placeholder="OD (mmHg)" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-bold text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <input type="number" step="0.5" id="rapidaOE" placeholder="OE (mmHg)" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-bold text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-          <button type="button" id="btnCancelRapida" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold">
+          <button type="button" id="btnCancelRapida" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer">
             Voltar
           </button>
-          <button type="submit" class="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1">
-            <i class="fa-solid fa-check"></i> Finalizar
+          <button type="submit" class="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1 cursor-pointer active:scale-95">
+            <i class="fa-solid fa-check"></i> Concluir
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: GUIA DE INSTALAÇÃO DO PWA           -->
+  <!-- ========================================== -->
+  <div id="modalInstalarPwa" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in duration-150">
+      
+      <div class="bg-slate-900 px-4 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-down text-brand-400 text-sm"></i>
+          <h2 class="text-sm font-bold">Instalar OftalmoFlow</h2>
+        </div>
+        <button id="btnCloseModalInstalar" class="text-white/80 hover:text-white p-1 rounded-lg cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="p-4 flex flex-col gap-3 text-xs text-slate-700">
+        <p class="font-medium">Instale o OftalmoFlow diretamente no seu celular, tablet ou computador para usar como aplicativo nativo e offline:</p>
+        
+        <!-- Instruções iOS (iPhone/iPad) -->
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col gap-1.5">
+          <div class="flex items-center gap-1.5 font-bold text-slate-900 text-xs">
+            <i class="fa-brands fa-apple text-slate-800 text-sm"></i> No iPhone ou iPad (Safari):
+          </div>
+          <ol class="list-decimal list-inside space-y-1 text-[11px] text-slate-600 pl-1">
+            <li>Toque no botão <strong>Compartilhar</strong> (<i class="fa-solid fa-arrow-up-from-bracket text-sky-600"></i>) na barra do Safari.</li>
+            <li>Role a tela e toque em <strong>"Adicionar à Tela de Início"</strong> (<i class="fa-regular fa-square-plus text-slate-800"></i>).</li>
+            <li>Toque em <strong>"Adicionar"</strong> no canto superior.</li>
+          </ol>
+        </div>
+
+        <!-- Instruções Android / Chrome / Edge -->
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col gap-1.5">
+          <div class="flex items-center gap-1.5 font-bold text-slate-900 text-xs">
+            <i class="fa-brands fa-android text-emerald-600 text-sm"></i> No Android ou Computador:
+          </div>
+          <p class="text-[11px] text-slate-600">
+            Toque nos <strong>três pontinhos (⋮)</strong> do navegador e selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.
+          </p>
+        </div>
+
+        <div class="flex justify-end pt-1">
+          <button type="button" id="btnFecharModalInstalar" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-black text-white font-semibold text-xs transition active:scale-95 cursor-pointer">
+            Entendi
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -308,32 +512,26 @@
   <div id="toastNotification" class="fixed bottom-3 right-3 z-50 transform translate-y-16 opacity-0 transition-all duration-200 pointer-events-none flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-md text-xs font-semibold bg-slate-900 text-white"></div>
 
   <!-- ========================================== -->
-  <!-- JAVASCRIPT PURO (STATE-DRIVEN & ABSOLUTE TIME) -->
+  <!-- JAVASCRIPT PURO (STATE-DRIVEN & PWA)       -->
   <!-- ========================================== -->
   <script>
     /**
-     * OFTALMOFLOW - SISTEMA CLÍNICO MINIMALISTA (CARDS FINOS)
-     * 
-     * PRINCÍPIO DA PRECISÃO DE TEMPO ABSOLUTA:
-     * - Nunca utilizamos contadores incrementais (contador++).
-     * - Gravamos o timestamp exato (`Date.now()`) no momento do clique (1ª gota ou 2ª gota).
-     * - O `setInterval` calcula `Date.now() - timestamp`.
-     * - Ao atingir ou passar de 10 minutos (600.000 ms), o número do cronômetro fica vermelho
-     *   e pulsa suavemente no próprio card como notificação visual clara.
+     * OFTALMOFLOW - GESTÃO CLÍNICA INTELIGENTE ULTRACOMPACTA
+     * Princípio de precisão de tempo absoluta com timestamps.
      */
 
-    const STORAGE_KEY = 'oftalmo_pacientes_v2';
-    const TEMPO_LIMITE_MS = 10 * 60 * 1000; // 10 Minutos
+    const STORAGE_KEY = 'oftalmo_pacientes_v3';
+    const TEMPO_LIMITE_MS = 10 * 60 * 1000; // 10 Minutos de dilatação
 
     const state = {
       pacientes: [],
       deferredPrompt: null
     };
 
-    // 1. LOCALSTORAGE & ESTADO
+    // 1. CARREGAR & PERSISTIR PACIENTES
     function carregarPacientes() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('oftalmo_pacientes_v2');
         if (raw) {
           state.pacientes = JSON.parse(raw);
         } else {
@@ -363,7 +561,7 @@
           nome: 'Carlos Eduardo Menezes',
           idade: 54,
           tipo: 'consulta',
-          etapaConsulta: 1, // Aguardando Consulta / Pré-exame (não pingou ainda)
+          etapa: 1,
           status: 'atendimento',
           timestamp_criacao: agora - (12 * 60 * 1000),
           timestamp_gota1: null,
@@ -376,12 +574,13 @@
           id: 'p-2',
           nome: 'Helena Beatriz Martins',
           idade: 68,
-          tipo: 'consulta',
-          etapaConsulta: 3, // Pós 2ª gota (pingou há 11 min -> Cronômetro vermelho)
+          tipo: 'pos_refrativa',
+          periodo: 'D7',
+          etapa: 2,
           status: 'atendimento',
-          timestamp_criacao: agora - (25 * 60 * 1000),
-          timestamp_gota1: agora - (22 * 60 * 1000),
-          timestamp_gota2: agora - (11 * 60 * 1000),
+          timestamp_criacao: agora - (20 * 60 * 1000),
+          timestamp_gota1: null,
+          timestamp_gota2: null,
           timestamp_finalizado: null,
           pressaoOcularOD: '14',
           pressaoOcularOE: '15'
@@ -390,11 +589,11 @@
           id: 'p-3',
           nome: 'Roberto Alves Santos',
           idade: 42,
-          tipo: 'exame',
-          tipoExame: 'OCT (Tomografia)',
-          etapaExame: 2,
+          tipo: 'caps',
+          olhos: 'OD',
+          etapa: 1,
           status: 'atendimento',
-          timestamp_criacao: agora - (14 * 60 * 1000),
+          timestamp_criacao: agora - (10 * 60 * 1000),
           timestamp_gota1: null,
           timestamp_gota2: null,
           timestamp_finalizado: null,
@@ -406,7 +605,7 @@
           nome: 'Ana Clara Albuquerque',
           idade: 29,
           tipo: 'consulta',
-          etapaConsulta: 4,
+          etapa: 4,
           status: 'finalizado',
           timestamp_criacao: agora - (45 * 60 * 1000),
           timestamp_gota1: agora - (40 * 60 * 1000),
@@ -418,19 +617,59 @@
       ];
     }
 
-    // 2. CÁLCULO DE TEMPO
+    // 2. CÁLCULO DE TEMPO DECORRIDO
     function calcularTempoDecorrido(timestamp) {
       if (!timestamp) return { texto: '00:00', totalSegundos: 0, passouLimite: false };
       const diffMs = Math.max(0, Date.now() - timestamp);
       const totalSegundos = Math.floor(diffMs / 1000);
       const minutos = Math.floor(totalSegundos / 60);
       const segundos = totalSegundos % 60;
-      const texto = `${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+      const texto = String(minutos).padStart(2, '0') + ':' + String(segundos).padStart(2, '0');
       const passouLimite = diffMs >= TEMPO_LIMITE_MS;
       return { texto, totalSegundos, passouLimite, diffMs };
     }
 
-    // 3. RENDERIZAÇÃO ULTRACOMPACTA DOS CARDS (SEM REFRESH)
+    // 3. BADGES VISUAIS DOS TIPOS DE ATENDIMENTO
+    function getBadgeTipoHTML(p) {
+      const tipo = p.tipo || 'consulta';
+      switch (tipo) {
+        case 'consulta':
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-200 shrink-0"><i class="fa-solid fa-user-doctor mr-1 text-[9px]"></i>Consulta</span>';
+        
+        case 'retorno':
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 shrink-0"><i class="fa-solid fa-stethoscope mr-1 text-[9px]"></i>Retorno</span>';
+        
+        case 'exame':
+          const exameTxt = p.tipoExame || 'Exame';
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 shrink-0"><i class="fa-solid fa-microscope mr-1 text-[9px]"></i>' + exameTxt + '</span>';
+        
+        case 'pos_refrativa':
+          const refPer = p.periodo ? ' • ' + p.periodo : '';
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 shrink-0"><i class="fa-solid fa-glasses mr-1 text-[9px]"></i>Pós Refrat.' + refPer + '</span>';
+        
+        case 'pos_reabordagem':
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 shrink-0"><i class="fa-solid fa-rotate mr-1 text-[9px]"></i>Pós Reabord.</span>';
+        
+        case 'caps':
+          const capsEye = p.olhos ? ' • ' + p.olhos : '';
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-200 shrink-0"><i class="fa-solid fa-eye mr-1 text-[9px]"></i>Caps' + capsEye + '</span>';
+        
+        case 'pos_caps':
+          const pcInfo = [p.periodo, p.olhos].filter(Boolean).join(' • ');
+          const pcSuffix = pcInfo ? ' • ' + pcInfo : '';
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-cyan-100 text-cyan-800 border border-cyan-200 shrink-0"><i class="fa-solid fa-bullseye mr-1 text-[9px]"></i>Pós Caps' + pcSuffix + '</span>';
+        
+        case 'pos_ptg':
+          const ptgInfo = [p.olhos, p.periodo].filter(Boolean).join(' • ');
+          const ptgSuffix = ptgInfo ? ' • ' + ptgInfo : '';
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0"><i class="fa-solid fa-shield-halved mr-1 text-[9px]"></i>Pós PTG' + ptgSuffix + '</span>';
+        
+        default:
+          return '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-800 border border-slate-200 shrink-0">' + tipo + '</span>';
+      }
+    }
+
+    // 4. RENDERIZAÇÃO DOS CARDS
     function renderPacientes() {
       const container = document.getElementById('containerPacientes');
       const emptyState = document.getElementById('emptyState');
@@ -453,162 +692,155 @@
         return (b.timestamp_criacao || 0) - (a.timestamp_criacao || 0);
       });
 
-      container.innerHTML = ordenados.map(p => criarCardFinoHTML(p)).join('');
+      container.innerHTML = ordenados.map(p => criarCardHTML(p)).join('');
       vincularEventos();
     }
 
-    /**
-     * Card Fino e Otimizado:
-     * - Linha Superior: Nome (negrito) + Idade | Badge Tipo + Botão Editar (lápis)
-     * - Linha Inferior: Etapa do fluxo | Relógio (com destaque vermelho ao expirar) + Botão de avançar pequeno lado a lado
-     */
-    function criarCardFinoHTML(p) {
+    function criarCardHTML(p) {
       const isFinalizado = p.status === 'finalizado';
-      const isConsulta = p.tipo === 'consulta';
-      const isExame = p.tipo === 'exame';
+      const tipo = p.tipo || 'consulta';
+      const isConsulta = tipo === 'consulta';
+      const etapa = p.etapa || p.etapaConsulta || 1;
 
       // Badge do Tipo
-      let badgeTipo = '';
-      if (isConsulta) {
-        badgeTipo = `<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-sky-100 text-sky-800 border border-sky-200">Consulta</span>`;
-      } else if (isExame) {
-        badgeTipo = `<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">${p.tipoExame || 'Exame'}</span>`;
-      } else {
-        badgeTipo = `<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">Retorno</span>`;
+      const badgeTipo = getBadgeTipoHTML(p);
+
+      // PIO (Pressão Intraocular)
+      let pioInfo = '';
+      if (p.pressaoOcularOD || p.pressaoOcularOE) {
+        pioInfo = '<span class="text-[10px] font-mono font-bold bg-slate-200/80 text-slate-700 px-1.5 py-0.5 rounded">PIO ' + (p.pressaoOcularOD || '-') + '/' + (p.pressaoOcularOE || '-') + '</span>';
       }
 
-      // Estilização do Card: Branco/Vivo para Atendimento, Cinza Mudo para Finalizado
+      // Estilo do Card
       const cardBg = isFinalizado 
         ? 'bg-slate-100/90 border-slate-200 text-slate-500 opacity-80' 
         : 'bg-white border-slate-200 text-slate-800 shadow-sm hover:border-slate-300';
 
-      // Lógica de Etapa & Cronômetro
+      // Configuração de Etapa & Botão de Avanço
       let etapaLabel = '';
-      let timerTimestamp = null;
+      let timerTimestamp = p.timestamp_criacao;
       let botaoAvançarHTML = '';
-      let pioInfo = '';
-
-      if (p.pressaoOcularOD || p.pressaoOcularOE) {
-        pioInfo = `<span class="text-[10px] font-mono font-bold bg-slate-200/70 text-slate-700 px-1.5 py-0.5 rounded">PIO ${p.pressaoOcularOD || '-'}/${p.pressaoOcularOE || '-'}</span>`;
-      }
+      let isDilatando = false;
 
       if (isConsulta) {
-        const etapa = p.etapaConsulta || 1;
         if (etapa === 1) {
           etapaLabel = 'Consulta / Pré-exame';
-          timerTimestamp = p.timestamp_criacao; // Tempo total desde o cadastro
+          timerTimestamp = p.timestamp_criacao;
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="pingar-gota1" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Aplicar 1ª Gota (Dilatação)"><i class="fa-solid fa-arrow-right text-xs"></i></button>';
+          }
         } else if (etapa === 2) {
-          etapaLabel = '1ª Gota Aplicada (Aguardando)';
-          timerTimestamp = p.timestamp_gota1; // Cronômetro da 1ª dilatação
+          etapaLabel = '1ª Gota Aplicada';
+          timerTimestamp = p.timestamp_gota1 || p.timestamp_criacao;
+          isDilatando = true;
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="pingar-gota2" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Aplicar 2ª Gota"><i class="fa-solid fa-arrow-right text-xs"></i></button>';
+          }
         } else if (etapa === 3) {
-          etapaLabel = '2ª Gota Aplicada (Dilatando)';
-          timerTimestamp = p.timestamp_gota2 || p.timestamp_gota1; // Cronômetro da 2ª gota (onde mede os 10 min)
+          etapaLabel = '2ª Gota (Dilatando)';
+          timerTimestamp = p.timestamp_gota2 || p.timestamp_gota1 || p.timestamp_criacao;
+          isDilatando = true;
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="finalizar-consulta" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Finalizar Consulta"><i class="fa-solid fa-check text-xs"></i></button>';
+          }
         } else {
           etapaLabel = 'Finalizado';
           timerTimestamp = null;
         }
-
-        if (!isFinalizado) {
-          if (etapa === 1) {
-            botaoAvançarHTML = `
-              <button data-action="pingar-gota1" data-id="${p.id}" class="btn-avancar w-8 h-8 rounded-lg bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center shadow-sm transition active:scale-95" title="Aplicar 1ª Gota (Iniciar Dilatação)">
-                <i class="fa-solid fa-arrow-right text-xs"></i>
-              </button>`;
-          } else if (etapa === 2) {
-            botaoAvançarHTML = `
-              <button data-action="pingar-gota2" data-id="${p.id}" class="btn-avancar w-8 h-8 rounded-lg bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center shadow-sm transition active:scale-95" title="Aplicar 2ª Gota">
-                <i class="fa-solid fa-arrow-right text-xs"></i>
-              </button>`;
-          } else if (etapa === 3) {
-            botaoAvançarHTML = `
-              <button data-action="finalizar-consulta" data-id="${p.id}" class="btn-avancar w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm transition active:scale-95" title="Finalizar Consulta">
-                <i class="fa-solid fa-check text-xs"></i>
-              </button>`;
+      } else if (tipo === 'exame') {
+        if (etapa === 1) {
+          etapaLabel = 'Aguardando Exame';
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="avancar-etapa" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Iniciar Exame"><i class="fa-solid fa-arrow-right text-xs"></i></button>';
           }
+        } else if (etapa === 2) {
+          etapaLabel = 'Em Realização';
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="finalizar-geral" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Concluir Exame"><i class="fa-solid fa-check text-xs"></i></button>';
+          }
+        } else {
+          etapaLabel = 'Exame Concluído';
+          timerTimestamp = null;
         }
-      } else if (isExame) {
-        const etapa = p.etapaExame || 1;
-        etapaLabel = etapa === 1 ? 'Aguardando Exame' : (etapa === 2 ? 'Em Realização' : 'Concluído');
-        timerTimestamp = p.timestamp_criacao;
-
-        if (!isFinalizado) {
-          botaoAvançarHTML = etapa === 1
-            ? `<button data-action="avancar-exame" data-id="${p.id}" class="btn-avancar w-8 h-8 rounded-lg bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-center shadow-sm transition active:scale-95" title="Chamar para exame"><i class="fa-solid fa-arrow-right text-xs"></i></button>`
-            : `<button data-action="finalizar-exame" data-id="${p.id}" class="btn-avancar w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm transition active:scale-95" title="Concluir exame"><i class="fa-solid fa-check text-xs"></i></button>`;
+      } else if (tipo === 'caps') {
+        if (etapa === 1) {
+          etapaLabel = 'Aguardando Capsulotomia';
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="avancar-etapa" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Chamar para Procedimento"><i class="fa-solid fa-arrow-right text-xs"></i></button>';
+          }
+        } else if (etapa === 2) {
+          etapaLabel = 'Em Procedimento Laser';
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="finalizar-geral" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Concluir Procedimento"><i class="fa-solid fa-check text-xs"></i></button>';
+          }
+        } else {
+          etapaLabel = 'Procedimento Concluído';
+          timerTimestamp = null;
         }
       } else {
-        etapaLabel = isFinalizado ? 'Retorno Concluído' : 'Aguardando Médico';
-        timerTimestamp = p.timestamp_criacao;
-
-        if (!isFinalizado) {
-          botaoAvançarHTML = `<button data-action="finalizar-retorno" data-id="${p.id}" class="btn-avancar w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-sm transition active:scale-95" title="Finalizar retorno"><i class="fa-solid fa-check text-xs"></i></button>`;
+        // Retorno, Pós Refrativa, Pós Caps, Pós Reabordagem, Pós PTG
+        if (etapa === 1) {
+          etapaLabel = 'Aguardando Atendimento';
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="avancar-etapa" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Chamar Paciente"><i class="fa-solid fa-arrow-right text-xs"></i></button>';
+          }
+        } else if (etapa === 2) {
+          etapaLabel = 'Em Atendimento';
+          if (!isFinalizado) {
+            botaoAvançarHTML = '<button data-action="finalizar-geral" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 cursor-pointer" title="Finalizar"><i class="fa-solid fa-check text-xs"></i></button>';
+          }
+        } else {
+          etapaLabel = 'Atendimento Concluído';
+          timerTimestamp = null;
         }
       }
 
-      // Se estiver finalizado, mostra botão pequeno de reabrir
       if (isFinalizado) {
-        botaoAvançarHTML = `
-          <button data-action="reabrir" data-id="${p.id}" class="btn-avancar w-8 h-8 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition active:scale-95" title="Reabrir atendimento">
-            <i class="fa-solid fa-rotate-left text-xs"></i>
-          </button>`;
+        botaoAvançarHTML = '<button data-action="reabrir" data-id="' + p.id + '" class="btn-avancar w-8 h-8 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition active:scale-95 cursor-pointer" title="Reabrir Atendimento"><i class="fa-solid fa-rotate-left text-xs"></i></button>';
       }
 
-      // Cálculo do tempo e cor vermelha se atingiu/passou de 10 min
+      // Tempo e Cor do Relógio
       const tempo = calcularTempoDecorrido(timerTimestamp);
-      
-      // Regra visual: Se passou de 10 min durante a dilatação (etapas 2 ou 3), o número fica vermelho
-      const isDilatando = isConsulta && (p.etapaConsulta === 2 || p.etapaConsulta === 3);
       const timerColorClass = (!isFinalizado && isDilatando && tempo.passouLimite)
         ? 'text-rose-600 font-extrabold animate-pulse'
         : (isFinalizado ? 'text-slate-400' : 'text-slate-800 font-bold');
 
       const tempoExibicao = isFinalizado ? '--:--' : tempo.texto;
 
-      return `
-        <div class="rounded-xl border p-2.5 sm:px-3.5 sm:py-2.5 transition-all ${cardBg}" id="card-${p.id}">
-          
-          <!-- LINHA SUPERIOR: NOME, IDADE E DIREITA: TIPO + EDITAR -->
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-1.5 min-w-0">
-              <span class="text-xs sm:text-sm font-bold truncate ${isFinalizado ? 'line-through text-slate-500' : 'text-slate-900'}">${p.nome}</span>
-              <span class="text-[11px] text-slate-400 font-normal shrink-0">• ${p.idade}a</span>
-              ${pioInfo}
-            </div>
-            
-            <div class="flex items-center gap-1.5 shrink-0">
-              ${badgeTipo}
-              <button data-action="editar" data-id="${p.id}" class="btn-editar text-slate-400 hover:text-slate-700 p-1 rounded hover:bg-slate-100 transition" title="Editar dados e pressão">
-                <i class="fa-solid fa-pen-to-square text-xs"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- LINHA INFERIOR: ETAPA + DIREITA: CRONÔMETRO AO LADO DO BOTÃO DE AVANÇAR -->
-          <div class="flex items-center justify-between mt-1 pt-1 border-t border-slate-100/60 text-xs">
-            
-            <!-- Etapa Atual -->
-            <div class="flex items-center gap-1 min-w-0">
-              <span class="text-[11px] font-medium ${isFinalizado ? 'text-slate-400' : 'text-slate-600'} truncate">
-                ${etapaLabel}
-              </span>
-            </div>
-
-            <!-- Cronômetro e Botão Pequeno lado a lado -->
-            <div class="flex items-center gap-2 shrink-0">
-              <div class="flex items-center gap-1 font-mono text-xs sm:text-sm ${timerColorClass}">
-                <i class="fa-regular fa-clock text-[11px] opacity-70"></i>
-                <span class="timer-display" data-timestamp="${timerTimestamp || ''}" data-dilatando="${isDilatando ? 'true' : 'false'}">${tempoExibicao}</span>
-              </div>
-              ${botaoAvançarHTML}
-            </div>
-
-          </div>
-
-        </div>
-      `;
+      return '<div class="rounded-xl border p-2.5 sm:px-3.5 sm:py-2.5 transition-all ' + cardBg + '" id="card-' + p.id + '">' +
+        '<!-- LINHA SUPERIOR: NOME, IDADE E DIREITA: BADGE + EDITAR -->' +
+        '<div class="flex items-center justify-between gap-2">' +
+          '<div class="flex items-center gap-1.5 min-w-0">' +
+            '<span class="text-xs sm:text-sm font-bold truncate ' + (isFinalizado ? 'line-through text-slate-500' : 'text-slate-900') + '">' + p.nome + '</span>' +
+            '<span class="text-[11px] text-slate-400 font-normal shrink-0">• ' + p.idade + 'a</span>' +
+            pioInfo +
+          '</div>' +
+          '<div class="flex items-center gap-1.5 shrink-0">' +
+            badgeTipo +
+            '<button data-action="editar" data-id="' + p.id + '" class="btn-editar text-slate-400 hover:text-slate-700 p-1 rounded hover:bg-slate-100 transition cursor-pointer" title="Editar dados e pressão">' +
+              '<i class="fa-solid fa-pen-to-square text-xs"></i>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+        '<!-- LINHA INFERIOR: ETAPA + CRONÔMETRO + BOTÃO LADO A LADO -->' +
+        '<div class="flex items-center justify-between mt-1 pt-1 border-t border-slate-100/60 text-xs">' +
+          '<div class="flex items-center gap-1 min-w-0">' +
+            '<span class="text-[11px] font-medium ' + (isFinalizado ? 'text-slate-400' : 'text-slate-600') + ' truncate">' +
+              etapaLabel +
+            '</span>' +
+          '</div>' +
+          '<div class="flex items-center gap-2 shrink-0">' +
+            '<div class="flex items-center gap-1 font-mono text-xs sm:text-sm ' + timerColorClass + '">' +
+              '<i class="fa-regular fa-clock text-[11px] opacity-70"></i>' +
+              '<span class="timer-display" data-timestamp="' + (timerTimestamp || '') + '" data-dilatando="' + (isDilatando ? 'true' : 'false') + '">' + tempoExibicao + '</span>' +
+            '</div>' +
+            botaoAvançarHTML +
+          '</div>' +
+        '</div>' +
+      '</div>';
     }
 
-    // 4. INTERVALO DO CRONÔMETRO (ATUALIZA O TEXTO E CLASSE VERMELHA)
+    // 5. LOOP DO CRONÔMETRO
     function iniciarLoopCronometro() {
       setInterval(() => {
         const displays = document.querySelectorAll('.timer-display');
@@ -620,7 +852,6 @@
             if (el.textContent !== tempo.texto) {
               el.textContent = tempo.texto;
             }
-            // Se passar de 10 min durante a dilatação, aplica classe vermelha no elemento pai
             if (isDilatando && tempo.passouLimite && !el.parentElement.classList.contains('text-rose-600')) {
               el.parentElement.classList.remove('text-slate-800');
               el.parentElement.classList.add('text-rose-600', 'font-extrabold', 'animate-pulse');
@@ -630,7 +861,7 @@
       }, 1000);
     }
 
-    // 5. EVENTOS DOS BOTÕES
+    // 6. GERENCIAMENTO DE AÇÕES
     function vincularEventos() {
       document.querySelectorAll('.btn-avancar').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -654,76 +885,181 @@
       const agora = Date.now();
 
       if (action === 'pingar-gota1') {
-        p.etapaConsulta = 2;
+        p.etapa = 2;
         p.timestamp_gota1 = agora;
         salvarPacientes();
-        mostrarToast(`1ª Gota aplicada em ${p.nome}`);
+        mostrarToast('1ª Gota aplicada em ' + p.nome);
       } else if (action === 'pingar-gota2') {
-        p.etapaConsulta = 3;
+        p.etapa = 3;
         p.timestamp_gota2 = agora;
         salvarPacientes();
-        mostrarToast(`2ª Gota aplicada em ${p.nome}`);
-      } else if (action === 'finalizar-consulta') {
+        mostrarToast('2ª Gota aplicada em ' + p.nome);
+      } else if (action === 'avancar-etapa') {
+        p.etapa = 2;
+        salvarPacientes();
+        mostrarToast(p.nome + ' em atendimento');
+      } else if (action === 'finalizar-consulta' || action === 'finalizar-geral') {
         if (!p.pressaoOcularOD && !p.pressaoOcularOE) {
           abrirModalTonometriaRapida(p);
         } else {
-          p.etapaConsulta = 4;
+          p.etapa = 3;
           p.status = 'finalizado';
           p.timestamp_finalizado = agora;
           salvarPacientes();
-          mostrarToast(`Atendimento de ${p.nome} finalizado`);
+          mostrarToast('Atendimento de ' + p.nome + ' concluído');
         }
-      } else if (action === 'avancar-exame') {
-        p.etapaExame = 2;
-        salvarPacientes();
-        mostrarToast(`${p.nome} em exame`);
-      } else if (action === 'finalizar-exame') {
-        p.etapaExame = 3;
-        p.status = 'finalizado';
-        p.timestamp_finalizado = agora;
-        salvarPacientes();
-        mostrarToast(`Exame de ${p.nome} concluído`);
-      } else if (action === 'finalizar-retorno') {
-        p.status = 'finalizado';
-        p.timestamp_finalizado = agora;
-        salvarPacientes();
-        mostrarToast(`Retorno finalizado`);
       } else if (action === 'reabrir') {
         p.status = 'atendimento';
-        if (p.tipo === 'consulta' && p.etapaConsulta === 4) p.etapaConsulta = 3;
+        if (p.tipo === 'consulta') {
+          p.etapa = 3;
+        } else {
+          p.etapa = 2;
+        }
         salvarPacientes();
-        mostrarToast(`${p.nome} reaberto`);
+        mostrarToast(p.nome + ' reaberto');
       }
     }
 
-    // 6. FORMULÁRIO DE NOVO PACIENTE (SIMPLIFICADO)
-    window.toggleTipoNovo = function() {
-      const tipo = document.querySelector('input[name="novoTipo"]:checked')?.value || 'consulta';
-      const boxExame = document.getElementById('boxOpcaoExame');
-      const lConsulta = document.getElementById('labelTipoConsulta');
-      const lExame = document.getElementById('labelTipoExame');
-      const lRetorno = document.getElementById('labelTipoRetorno');
+    // 7. CONTROLE INTELIGENTE DO FORMULÁRIO DE NOVO PACIENTE
+    const boxExtra = document.getElementById('boxInfoExtraTipo');
+    const subExame = document.getElementById('subBoxExame');
+    const subPosRefrativa = document.getElementById('subBoxPosRefrativa');
+    const subCaps = document.getElementById('subBoxCaps');
+    const subPosCaps = document.getElementById('subBoxPosCaps');
+    const subPosPtg = document.getElementById('subBoxPosPtg');
+    const inputTipoNovo = document.getElementById('novoTipo');
 
-      [lConsulta, lExame, lRetorno].forEach(l => {
-        l.className = 'flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer text-center';
+    function selecionarTipo(tipo) {
+      inputTipoNovo.value = tipo;
+
+      // Estilizar botões de tipo
+      document.querySelectorAll('#gridTiposNovo .btn-tipo-item').forEach(btn => {
+        const btnTipo = btn.getAttribute('data-tipo');
+        if (btnTipo === tipo) {
+          btn.className = 'btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-brand-50 border-brand-500 text-brand-900 font-bold shadow-xs cursor-pointer';
+        } else {
+          btn.className = 'btn-tipo-item flex items-center gap-1.5 p-2 rounded-xl border text-left transition text-xs active:scale-95 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer';
+        }
       });
 
-      if (tipo === 'consulta') {
-        lConsulta.className = 'flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-brand-500 bg-brand-50 cursor-pointer text-center';
-        boxExame.classList.add('hidden');
-      } else if (tipo === 'exame') {
-        lExame.className = 'flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-amber-500 bg-amber-50 cursor-pointer text-center';
-        boxExame.classList.remove('hidden');
-      } else {
-        lRetorno.className = 'flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-indigo-500 bg-indigo-50 cursor-pointer text-center';
-        boxExame.classList.add('hidden');
-      }
-    };
+      // Resetar visibilidade das caixas extras
+      [subExame, subPosRefrativa, subCaps, subPosCaps, subPosPtg].forEach(box => {
+        box.classList.add('hidden');
+        box.classList.remove('flex');
+      });
 
+      // Mostrar caixa extra SOMENTE se o tipo necessitar de mais informações
+      if (tipo === 'exame') {
+        boxExtra.className = 'rounded-xl border border-amber-200 bg-amber-50/70 p-2.5 flex flex-col gap-1 transition-all';
+        subExame.classList.remove('hidden');
+        subExame.classList.add('flex');
+      } else if (tipo === 'pos_refrativa') {
+        boxExtra.className = 'rounded-xl border border-purple-200 bg-purple-50/70 p-2.5 flex flex-col gap-1.5 transition-all';
+        subPosRefrativa.classList.remove('hidden');
+        subPosRefrativa.classList.add('flex');
+      } else if (tipo === 'caps') {
+        boxExtra.className = 'rounded-xl border border-teal-200 bg-teal-50/70 p-2.5 flex flex-col gap-1.5 transition-all';
+        subCaps.classList.remove('hidden');
+        subCaps.classList.add('flex');
+      } else if (tipo === 'pos_caps') {
+        boxExtra.className = 'rounded-xl border border-cyan-200 bg-cyan-50/70 p-2.5 flex flex-col gap-2 transition-all';
+        subPosCaps.classList.remove('hidden');
+        subPosCaps.classList.add('flex');
+      } else if (tipo === 'pos_ptg') {
+        boxExtra.className = 'rounded-xl border border-emerald-200 bg-emerald-50/70 p-2.5 flex flex-col gap-2 transition-all';
+        subPosPtg.classList.remove('hidden');
+        subPosPtg.classList.add('flex');
+      } else {
+        // Consulta, Retorno, Pós Reabordagem -> Sem caixa extra!
+        boxExtra.classList.add('hidden');
+        boxExtra.classList.remove('flex');
+      }
+    }
+
+    // Clique nos tipos
+    document.querySelectorAll('#gridTiposNovo .btn-tipo-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selecionarTipo(btn.getAttribute('data-tipo'));
+      });
+    });
+
+    // Chips de Período Refrativa
+    document.querySelectorAll('#chipsPeriodoRefrativa .chip-periodo').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.getAttribute('data-val');
+        document.getElementById('novoPeriodoRefrativa').value = val;
+        document.querySelectorAll('#chipsPeriodoRefrativa .chip-periodo').forEach(c => {
+          c.className = 'chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-200 bg-white text-purple-800 hover:bg-purple-100 cursor-pointer';
+        });
+        chip.className = 'chip-periodo px-2 py-0.5 rounded text-[11px] font-bold border border-purple-600 bg-purple-600 text-white cursor-pointer';
+      });
+    });
+
+    // Chips de Olho Caps
+    document.querySelectorAll('#groupOlhosCaps .btn-olho-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-olho');
+        document.getElementById('novoCapsOlho').value = val;
+        document.querySelectorAll('#groupOlhosCaps .btn-olho-item').forEach(b => {
+          b.className = 'btn-olho-item py-1.5 rounded-lg border border-teal-300 bg-white text-teal-900 font-bold text-xs hover:bg-teal-50 cursor-pointer text-center';
+        });
+        btn.className = 'btn-olho-item py-1.5 rounded-lg border border-teal-600 bg-teal-600 text-white font-bold text-xs cursor-pointer text-center shadow-xs';
+      });
+    });
+
+    // Chips de Período Pós Caps
+    document.querySelectorAll('#chipsPeriodoPosCaps .chip-periodo-caps').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.getAttribute('data-val');
+        document.getElementById('novoPeriodoPosCaps').value = val;
+        document.querySelectorAll('#chipsPeriodoPosCaps .chip-periodo-caps').forEach(c => {
+          c.className = 'chip-periodo-caps px-2 py-0.5 rounded text-[11px] font-bold border border-cyan-200 bg-white text-cyan-800 hover:bg-cyan-100 cursor-pointer';
+        });
+        chip.className = 'chip-periodo-caps px-2 py-0.5 rounded text-[11px] font-bold border border-cyan-600 bg-cyan-600 text-white cursor-pointer';
+      });
+    });
+
+    // Chips de Olho Pós Caps
+    document.querySelectorAll('#groupOlhosPosCaps .btn-olho-poscaps').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-olho');
+        document.getElementById('novoPosCapsOlho').value = val;
+        document.querySelectorAll('#groupOlhosPosCaps .btn-olho-poscaps').forEach(b => {
+          b.className = 'btn-olho-poscaps py-1 rounded-lg border border-cyan-200 bg-white text-cyan-800 font-bold text-xs hover:bg-cyan-50 cursor-pointer text-center';
+        });
+        btn.className = 'btn-olho-poscaps py-1 rounded-lg border border-cyan-600 bg-cyan-600 text-white font-bold text-xs cursor-pointer text-center shadow-xs';
+      });
+    });
+
+    // Chips de Olho Pós PTG
+    document.querySelectorAll('#groupOlhosPosPtg .btn-olho-ptg').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-olho');
+        document.getElementById('novoPosPtgOlho').value = val;
+        document.querySelectorAll('#groupOlhosPosPtg .btn-olho-ptg').forEach(b => {
+          b.className = 'btn-olho-ptg py-1.5 rounded-lg border border-emerald-300 bg-white text-emerald-900 font-bold text-xs hover:bg-emerald-50 cursor-pointer text-center';
+        });
+        btn.className = 'btn-olho-ptg py-1.5 rounded-lg border border-emerald-600 bg-emerald-600 text-white font-bold text-xs cursor-pointer text-center shadow-xs';
+      });
+    });
+
+    // Chips de Período Pós PTG
+    document.querySelectorAll('#chipsPeriodoPosPtg .chip-periodo-ptg').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.getAttribute('data-val');
+        document.getElementById('novoPeriodoPosPtg').value = val;
+        document.querySelectorAll('#chipsPeriodoPosPtg .chip-periodo-ptg').forEach(c => {
+          c.className = 'chip-periodo-ptg px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-100 cursor-pointer';
+        });
+        chip.className = 'chip-periodo-ptg px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer';
+      });
+    });
+
+    // Abrir e Fechar Modal Novo Paciente
     const modalNovo = document.getElementById('modalNovoPaciente');
     document.getElementById('btnOpenModalNovo').addEventListener('click', () => {
       document.getElementById('formNovoPaciente').reset();
-      window.toggleTipoNovo();
+      selecionarTipo('consulta');
       modalNovo.classList.remove('hidden');
       setTimeout(() => document.getElementById('novoNome').focus(), 50);
     });
@@ -732,15 +1068,33 @@
     document.getElementById('btnCloseModalNovo').addEventListener('click', fecharModalNovo);
     document.getElementById('btnCancelModalNovo').addEventListener('click', fecharModalNovo);
 
+    // Submissão do Formulário de Novo Paciente
     document.getElementById('formNovoPaciente').addEventListener('submit', (e) => {
       e.preventDefault();
       const nome = document.getElementById('novoNome').value.trim();
       const idade = parseInt(document.getElementById('novoIdade').value, 10);
-      const tipo = document.querySelector('input[name="novoTipo"]:checked')?.value || 'consulta';
-      const tipoExame = tipo === 'exame' ? document.getElementById('novoExameNome').value : '';
+      const tipo = inputTipoNovo.value || 'consulta';
 
       if (!nome || isNaN(idade)) return;
       const agora = Date.now();
+
+      let tipoExame = '';
+      let periodo = '';
+      let olhos = '';
+
+      if (tipo === 'exame') {
+        tipoExame = document.getElementById('novoExameNome').value;
+      } else if (tipo === 'pos_refrativa') {
+        periodo = document.getElementById('novoPeriodoRefrativa').value.trim();
+      } else if (tipo === 'caps') {
+        olhos = document.getElementById('novoCapsOlho').value || '';
+      } else if (tipo === 'pos_caps') {
+        periodo = document.getElementById('novoPeriodoPosCaps').value.trim();
+        olhos = document.getElementById('novoPosCapsOlho').value || '';
+      } else if (tipo === 'pos_ptg') {
+        olhos = document.getElementById('novoPosPtgOlho').value || '';
+        periodo = document.getElementById('novoPeriodoPosPtg').value.trim();
+      }
 
       state.pacientes.unshift({
         id: 'p-' + agora + '-' + Math.random().toString(36).substring(2, 6),
@@ -748,8 +1102,9 @@
         idade,
         tipo,
         tipoExame,
-        etapaConsulta: 1,
-        etapaExame: 1,
+        periodo,
+        olhos,
+        etapa: 1,
         status: 'atendimento',
         timestamp_criacao: agora,
         timestamp_gota1: null,
@@ -761,10 +1116,10 @@
 
       salvarPacientes();
       fecharModalNovo();
-      mostrarToast(`${nome} adicionado`);
+      mostrarToast(nome + ' adicionado');
     });
 
-    // 7. MODAL DE EDIÇÃO
+    // 8. MODAL DE EDIÇÃO
     const modalEdit = document.getElementById('modalEditarPaciente');
     function abrirModalEditar(id) {
       const p = state.pacientes.find(item => item.id === id);
@@ -801,7 +1156,7 @@
       const id = document.getElementById('editPacienteId').value;
       const p = state.pacientes.find(item => item.id === id);
       if (!p) return;
-      if (confirm(`Remover "${p.nome}"?`)) {
+      if (confirm('Remover "' + p.nome + '"?')) {
         state.pacientes = state.pacientes.filter(item => item.id !== id);
         salvarPacientes();
         fecharModalEdit();
@@ -809,11 +1164,11 @@
       }
     });
 
-    // 8. MODAL TONOMETRIA RÁPIDA
+    // 9. MODAL TONOMETRIA RÁPIDA
     const modalRapida = document.getElementById('modalTonometriaRapida');
     function abrirModalTonometriaRapida(paciente) {
       document.getElementById('rapidaPacienteId').value = paciente.id;
-      document.getElementById('rapidaPacienteNome').textContent = `Paciente: ${paciente.nome}`;
+      document.getElementById('rapidaPacienteNome').textContent = 'Paciente: ' + paciente.nome;
       document.getElementById('rapidaOD').value = paciente.pressaoOcularOD || '';
       document.getElementById('rapidaOE').value = paciente.pressaoOcularOE || '';
       modalRapida.classList.remove('hidden');
@@ -830,19 +1185,19 @@
 
       p.pressaoOcularOD = document.getElementById('rapidaOD').value.trim();
       p.pressaoOcularOE = document.getElementById('rapidaOE').value.trim();
-      p.etapaConsulta = 4;
+      p.etapa = 3;
       p.status = 'finalizado';
       p.timestamp_finalizado = Date.now();
 
       salvarPacientes();
       modalRapida.classList.add('hidden');
-      mostrarToast(`Atendimento de ${p.nome} finalizado`);
+      mostrarToast('Atendimento de ' + p.nome + ' concluído');
     });
 
-    // 9. LIMPAR FINALIZADOS
+    // 10. LIMPAR FINALIZADOS
     document.getElementById('btnLimparFinalizados').addEventListener('click', () => {
       const qtd = state.pacientes.filter(p => p.status === 'finalizado').length;
-      if (qtd && confirm(`Limpar ${qtd} atendimentos finalizados?`)) {
+      if (qtd && confirm('Limpar ' + qtd + ' atendimentos finalizados?')) {
         state.pacientes = state.pacientes.filter(p => p.status !== 'finalizado');
         salvarPacientes();
         mostrarToast('Finalizados limpos');
@@ -854,13 +1209,13 @@
       document.getElementById('countFinalizados').textContent = state.pacientes.filter(p => p.status === 'finalizado').length;
     }
 
-    // 10. TOAST
+    // 11. TOAST
     let toastTimer = null;
     function mostrarToast(msg) {
       const toast = document.getElementById('toastNotification');
       if (!toast) return;
       clearTimeout(toastTimer);
-      toast.innerHTML = `<i class="fa-solid fa-circle-check text-brand-400 text-xs"></i> <span>${msg}</span>`;
+      toast.innerHTML = '<i class="fa-solid fa-circle-check text-brand-400 text-xs"></i> <span>' + msg + '</span>';
       toast.classList.remove('opacity-0', 'translate-y-16');
       toast.classList.add('opacity-100', 'translate-y-0');
       toastTimer = setTimeout(() => {
@@ -869,35 +1224,62 @@
       }, 2500);
     }
 
-    // 11. REGISTRO SERVICE WORKER & PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => console.warn(err));
-      });
+    // 12. PWA INSTALAÇÃO E SERVICE WORKER
+    const btnInstallPwa = document.getElementById('btnInstallPwa');
+    const modalInstalar = document.getElementById('modalInstalarPwa');
+
+    // Se já estiver rodando em modo aplicativo (standalone), esconde o botão de instalar
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isStandalone && btnInstallPwa) {
+      btnInstallPwa.classList.add('hidden');
     }
 
-    const btnInstallPwa = document.getElementById('btnInstallPwa');
+    // Captura o evento do navegador para instalação em 1 clique
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       state.deferredPrompt = e;
-      btnInstallPwa.classList.remove('hidden');
-      btnInstallPwa.classList.add('flex');
+      if (btnInstallPwa && !isStandalone) {
+        btnInstallPwa.classList.remove('hidden');
+      }
     });
 
     btnInstallPwa.addEventListener('click', async () => {
-      if (!state.deferredPrompt) return;
-      state.deferredPrompt.prompt();
-      const { outcome } = await state.deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        btnInstallPwa.classList.add('hidden');
+      if (state.deferredPrompt) {
+        state.deferredPrompt.prompt();
+        const { outcome } = await state.deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          btnInstallPwa.classList.add('hidden');
+        }
+        state.deferredPrompt = null;
+      } else {
+        // Se estiver no iOS Safari ou navegador sem prompt automático, abre o modal instrutivo
+        modalInstalar.classList.remove('hidden');
       }
-      state.deferredPrompt = null;
     });
+
+    const fecharModalInstalar = () => modalInstalar.classList.add('hidden');
+    document.getElementById('btnCloseModalInstalar').addEventListener('click', fecharModalInstalar);
+    document.getElementById('btnFecharModalInstalar').addEventListener('click', fecharModalInstalar);
+
+    // Registro do Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((reg) => {
+          reg.update();
+        }).catch(err => console.warn('[SW Error]', err));
+      });
+    }
 
     // INICIALIZAÇÃO
     document.addEventListener('DOMContentLoaded', () => {
       carregarPacientes();
       iniciarLoopCronometro();
+
+      // Se aberto com ?novo=true (atalho do PWA), abre o modal de novo paciente
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('novo') === 'true') {
+        document.getElementById('btnOpenModalNovo').click();
+      }
     });
   </script>
 </body>

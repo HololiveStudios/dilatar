@@ -1,32 +1,39 @@
-/**
- * OftalmoFlow - Service Worker (public/sw.js)
+﻿/**
+ * OftalmoFlow - Service Worker (sw.js)
  * Estratégia de Caching Offline-First para Clínica Oftalmológica
  */
 
-const CACHE_NAME = 'oftalmoflow-cache-v1';
+const CACHE_NAME = 'oftalmoflow-cache-v2';
 
+// Recursos críticos a serem pré-cacheados na instalação
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/icon.svg',
+  '/pwa-192x192.png',
+  '/pwa-512x512.png',
+  '/pwa-maskable-512x512.png',
+  '/apple-touch-icon.png',
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
+// Evento de Instalação: baixa os recursos essenciais para uso offline
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('[Service Worker] Pré-cacheando recursos essenciais');
         return cache.addAll(PRECACHE_ASSETS).catch((err) => {
-          console.warn('[Service Worker] Falha ao pré-cachear alguns itens CDN:', err);
+          console.warn('[Service Worker] Falha ao pré-cachear alguns itens:', err);
         });
       })
       .then(() => self.skipWaiting())
   );
 });
 
+// Evento de Ativação: limpa caches antigos e assume controle imediato
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -42,13 +49,16 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Evento de Fetch: Intercepta requisições para operação 100% offline
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
+  // Ignorar requisições não-GET
   if (event.request.method !== 'GET') {
     return;
   }
 
+  // 1. Requisições de navegação HTML -> Network First com fallback para Cache
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -67,6 +77,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // 2. CDNs externos e Fontes -> Cache First
   if (
     url.hostname.includes('tailwindcss.com') ||
     url.hostname.includes('cdnjs.cloudflare.com') ||
@@ -95,6 +106,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // 3. Demais recursos estáticos -> Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request)

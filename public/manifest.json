@@ -1,21 +1,17 @@
-{
+﻿{
   "id": "/",
   "name": "OftalmoFlow - Fluxo de Pacientes",
   "short_name": "OftalmoFlow",
-  "description": "Sistema de controle de fluxo de atendimento e tempo de dilatação ocular para clínicas oftalmológicas.",
+  "description": "Sistema ultracompacto para controle de fluxo e dilatação de pacientes em clínicas oftalmológicas.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "background_color": "#f8fafc",
   "theme_color": "#0d9488",
+  "categories": ["medical", "productivity", "utilities"],
+  "prefer_related_applications": false,
   "icons": [
-    {
-      "src": "/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
     {
       "src": "/pwa-192x192.png",
       "sizes": "192x192",
@@ -33,6 +29,31 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Novo Paciente",
+      "short_name": "Novo",
+      "description": "Iniciar atendimento de novo paciente",
+      "url": "/?novo=true",
+      "icons": [
+        {
+          "src": "/pwa-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
