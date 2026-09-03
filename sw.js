@@ -1,9 +1,9 @@
-﻿/**
+/**
  * OftalmoFlow - Service Worker (sw.js)
  * Estratégia de Caching Offline-First para Clínica Oftalmológica
  */
 
-const CACHE_NAME = 'oftalmoflow-cache-v3';
+const CACHE_NAME = 'oftalmoflow-cache-v4';
 
 // Recursos críticos a serem pré-cacheados na instalação (100% autossuficiente)
 const PRECACHE_ASSETS = [

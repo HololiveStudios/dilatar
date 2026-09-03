@@ -774,7 +774,7 @@
      * 3. PWA COMO APLICATIVO REAL: Evento beforeinstallprompt capturado com diálogo nativo de instalação + ícones e manifest ricos.
      */
 
-    const STORAGE_KEY = 'oftalmo_pacientes_v3';
+    const STORAGE_KEY = 'oftalmo_pacientes_v4';
     const TEMPO_LIMITE_MS = 10 * 60 * 1000; // 10 Minutos de dilatação (alarme visual pulsante)
 
     const state = {
@@ -782,21 +782,33 @@
       deferredPrompt: null
     };
 
-    // 1. CARREGAR E SALVAR PACIENTES (CORREÇÃO DE BUG DE RECARGA)
+    // Identificador para limpar dados fictícios de exemplo anteriores
+    function isPacienteFicticio(p) {
+      if (!p) return true;
+      if (['p-1', 'p-2', 'p-3', 'p-4', 'p-5'].includes(p.id)) return true;
+      const nomeLower = (p.nome || '').toLowerCase();
+      if (nomeLower.includes('carlos eduardo') || nomeLower.includes('roberto alves') || nomeLower.includes('helena beatriz') || nomeLower.includes('maria clara') || nomeLower.includes('ana albuquerque')) {
+        return true;
+      }
+      return false;
+    }
+
+    // 1. CARREGAR E SALVAR PACIENTES (SEM DADOS FICTÍCIOS)
     function carregarPacientes() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('oftalmo_pacientes_v2');
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('oftalmo_pacientes_v3') || localStorage.getItem('oftalmo_pacientes_v2');
         if (raw) {
-          state.pacientes = JSON.parse(raw);
+          const parsed = JSON.parse(raw);
+          state.pacientes = Array.isArray(parsed) ? parsed.filter(p => !isPacienteFicticio(p)) : [];
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state.pacientes));
         } else {
-          state.pacientes = getPacientesIniciais();
+          state.pacientes = [];
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state.pacientes));
         }
       } catch (err) {
-        state.pacientes = getPacientesIniciais();
+        state.pacientes = [];
       }
       
-      // CRÍTICO: Sempre renderizar na inicialização para nunca sumir os pacientes ao atualizar a página!
       renderPacientes();
       atualizarContadores();
     }
@@ -812,81 +824,7 @@
     }
 
     function getPacientesIniciais() {
-      const agora = Date.now();
-      return [
-        {
-          id: 'p-1',
-          nome: 'Carlos Eduardo Menezes',
-          idade: 54,
-          tipo: 'consulta',
-          etapa: 1, // Pré-exame (sem contagem de tempo)
-          status: 'atendimento',
-          timestamp_criacao: agora - (12 * 60 * 1000),
-          timestamp_gota1: null,
-          timestamp_gota2: null,
-          timestamp_finalizado: null,
-          pressaoOcularOD: '',
-          pressaoOcularOE: ''
-        },
-        {
-          id: 'p-2',
-          nome: 'Helena Beatriz Martins',
-          idade: 68,
-          tipo: 'consulta',
-          etapa: 3, // 2ª Gota aplicada há 11 min (cronômetro vermelho pulsante)
-          status: 'atendimento',
-          timestamp_criacao: agora - (25 * 60 * 1000),
-          timestamp_gota1: agora - (22 * 60 * 1000),
-          timestamp_gota2: agora - (11 * 60 * 1000),
-          timestamp_finalizado: null,
-          pressaoOcularOD: '14',
-          pressaoOcularOE: '15'
-        },
-        {
-          id: 'p-3',
-          nome: 'Roberto Alves Santos',
-          idade: 42,
-          tipo: 'pos_refrativa',
-          periodo: 'D7',
-          etapa: 1,
-          status: 'atendimento',
-          timestamp_criacao: agora - (10 * 60 * 1000),
-          timestamp_gota1: null,
-          timestamp_gota2: null,
-          timestamp_finalizado: null,
-          pressaoOcularOD: '',
-          pressaoOcularOE: ''
-        },
-        {
-          id: 'p-4',
-          nome: 'Dra. Maria Clara Guimarães',
-          idade: 61,
-          tipo: 'caps',
-          olhos: 'OD',
-          etapa: 1,
-          status: 'atendimento',
-          timestamp_criacao: agora - (8 * 60 * 1000),
-          timestamp_gota1: null,
-          timestamp_gota2: null,
-          timestamp_finalizado: null,
-          pressaoOcularOD: '',
-          pressaoOcularOE: ''
-        },
-        {
-          id: 'p-5',
-          nome: 'Ana Albuquerque',
-          idade: 29,
-          tipo: 'consulta',
-          etapa: 4,
-          status: 'finalizado',
-          timestamp_criacao: agora - (45 * 60 * 1000),
-          timestamp_gota1: agora - (40 * 60 * 1000),
-          timestamp_gota2: agora - (30 * 60 * 1000),
-          timestamp_finalizado: agora - (10 * 60 * 1000),
-          pressaoOcularOD: '13',
-          pressaoOcularOE: '14'
-        }
-      ];
+      return []; // Começa sempre 100% limpo, sem pacientes fictícios
     }
 
     // 2. CÁLCULO DE TEMPO DECORRIDO
