@@ -3,9 +3,9 @@
  * Estratégia de Caching Offline-First para Clínica Oftalmológica
  */
 
-const CACHE_NAME = 'oftalmoflow-cache-v2';
+const CACHE_NAME = 'oftalmoflow-cache-v3';
 
-// Recursos críticos a serem pré-cacheados na instalação
+// Recursos críticos a serem pré-cacheados na instalação (100% autossuficiente)
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
@@ -15,8 +15,8 @@ const PRECACHE_ASSETS = [
   '/pwa-512x512.png',
   '/pwa-maskable-512x512.png',
   '/apple-touch-icon.png',
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
+  '/screenshot-mobile.png',
+  '/screenshot-desktop.png'
 ];
 
 // Evento de Instalação: baixa os recursos essenciais para uso offline
@@ -24,7 +24,6 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[Service Worker] Pré-cacheando recursos essenciais');
         return cache.addAll(PRECACHE_ASSETS).catch((err) => {
           console.warn('[Service Worker] Falha ao pré-cachear alguns itens:', err);
         });
@@ -40,7 +39,6 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('[Service Worker] Removendo cache antigo:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -58,7 +56,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 1. Requisições de navegação HTML -> Network First com fallback para Cache
+  // 1. Navegação HTML -> Network First com fallback imediato para Cache
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -77,36 +75,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. CDNs externos e Fontes -> Cache First
-  if (
-    url.hostname.includes('tailwindcss.com') ||
-    url.hostname.includes('cdnjs.cloudflare.com') ||
-    url.hostname.includes('fonts.googleapis.com') ||
-    url.hostname.includes('fonts.gstatic.com') ||
-    url.hostname.includes('ka-f.fontawesome.com')
-  ) {
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        return fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-          }
-          return networkResponse;
-        }).catch(() => {
-          return new Response('', { status: 408, headers: { 'Content-Type': 'text/plain' } });
-        });
-      })
-    );
-    return;
-  }
-
-  // 3. Demais recursos estáticos -> Stale-While-Revalidate
+  // 2. Recursos estáticos locais -> Cache First com atualização em segundo plano (Stale-While-Revalidate)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request)
