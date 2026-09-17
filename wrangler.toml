@@ -1,0 +1,8 @@
+﻿name = "eyesync"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "eyesync-db"
+database_id = "efbd2c53-9021-4fd1-b188-7b7071b9a24f"

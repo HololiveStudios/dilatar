@@ -1,11 +1,11 @@
-/**
+﻿/**
  * OftalmoFlow - Service Worker (sw.js)
- * Estratégia de Caching Offline-First para Clínica Oftalmológica
+ * Estratégia de Caching Offline-First + Bypass Direto para API Cloudflare
  */
 
-const CACHE_NAME = 'oftalmoflow-cache-v4';
+const CACHE_NAME = 'oftalmoflow-cache-v5';
 
-// Recursos críticos a serem pré-cacheados na instalação (100% autossuficiente)
+// Recursos estáticos pré-cacheados (carregamento 0ms e offline)
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
@@ -19,20 +19,14 @@ const PRECACHE_ASSETS = [
   '/screenshot-desktop.png'
 ];
 
-// Evento de Instalação: baixa os recursos essenciais para uso offline
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(PRECACHE_ASSETS).catch((err) => {
-          console.warn('[Service Worker] Falha ao pré-cachear alguns itens:', err);
-        });
-      })
+      .then((cache) => cache.addAll(PRECACHE_ASSETS).catch((err) => console.warn('[SW Precache]', err)))
       .then(() => self.skipWaiting())
   );
 });
 
-// Evento de Ativação: limpa caches antigos e assume controle imediato
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -47,16 +41,28 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Evento de Fetch: Intercepta requisições para operação 100% offline
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+
+  // 1. API Cloudflare (/api/*) -> Sempre Rede Direta (nunca cachear)
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return new Response(JSON.stringify({ error: 'offline', offline: true }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        });
+      })
+    );
+    return;
+  }
 
   // Ignorar requisições não-GET
   if (event.request.method !== 'GET') {
     return;
   }
 
-  // 1. Navegação HTML -> Network First com fallback imediato para Cache
+  // 2. Navegação HTML -> Network First com fallback imediato para Cache
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -75,7 +81,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. Recursos estáticos locais -> Cache First com atualização em segundo plano (Stale-While-Revalidate)
+  // 3. Recursos estáticos locais -> Cache First com atualização em segundo plano
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request)
