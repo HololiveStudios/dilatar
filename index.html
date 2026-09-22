@@ -459,17 +459,38 @@
       </div>
 
       <!-- EDITOR DE PROCEDIMENTOS / PROTOCOLO DO MÉDICO -->
-      <div id="secaoEditorProtocolo" class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div id="secaoEditorProtocolo" class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3.5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
           <div>
-            <span class="text-[11px] font-bold text-brand-700 uppercase">Configuração de Fluxos</span>
-            <h3 id="editorProtocoloTitulo" class="text-sm font-bold text-slate-900">Procedimentos do Médico</h3>
+            <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider">Configuração de Fluxos Clínicos</span>
+            <h3 id="editorProtocoloTitulo" class="text-sm sm:text-base font-bold text-slate-900">Procedimentos do Médico</h3>
           </div>
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs font-bold text-slate-500">Procedimento:</span>
-            <select id="selectProcedimentoSetup" class="px-2.5 py-1 text-xs font-bold text-brand-700 bg-brand-50 border border-brand-200 rounded-lg cursor-pointer">
-              <!-- Injetado dinamicamente -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" id="btnNovoProcedimentoSetup" class="px-2.5 py-1.5 rounded-xl bg-brand-50 hover:bg-brand-100 border border-brand-300 text-brand-700 text-xs font-bold flex items-center gap-1 cursor-pointer">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              <span>+ Novo Procedimento</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Seletor do Procedimento Ativo + Ações de Renomear e Excluir -->
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <label for="selectProcedimentoSetup" class="text-xs font-bold text-slate-600 shrink-0">Procedimento:</label>
+            <select id="selectProcedimentoSetup" class="flex-1 max-w-sm px-3 py-1.5 text-xs sm:text-sm font-bold text-slate-800 bg-white border border-slate-300 rounded-lg cursor-pointer">
+              <!-- Injetado dinamicamente garantido -->
             </select>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button type="button" id="btnRenomearProcedimentoSetup" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer flex items-center gap-1" title="Renomear procedimento selecionado">
+              <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>Renomear</span>
+            </button>
+            <button type="button" id="btnExcluirProcedimentoSetup" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 text-xs font-bold cursor-pointer flex items-center gap-1" title="Excluir procedimento selecionado">
+              <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              <span>Excluir</span>
+            </button>
           </div>
         </div>
 
@@ -485,17 +506,30 @@
           </label>
         </div>
 
-        <div id="pipelineStepsList" class="flex flex-col gap-2 pt-1">
-          <!-- Etapas injetadas dinamicamente -->
+        <!-- Abas de Regras (Ex: Adulto vs Infantil) -->
+        <div id="containerAbasRegras" class="hidden flex items-center gap-2 border-b border-slate-200 pb-2">
+          <!-- Injetado dinamicamente -->
         </div>
 
-        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-          <button id="btnAddStepToPipeline" class="px-3 py-1.5 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold flex items-center gap-1 cursor-pointer">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-            <span>Adicionar Etapa</span>
+        <!-- Lista de Etapas Configurada -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Sequência de Etapas:</span>
+            <span id="labelContagemEtapas" class="text-[11px] font-semibold text-slate-400">0 etapas</span>
+          </div>
+          <div id="pipelineStepsList" class="flex flex-col gap-2">
+            <!-- Etapas injetadas dinamicamente -->
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
+          <button type="button" id="btnAddStepToPipeline" class="px-3 py-2 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            <span>+ Adicionar Etapa</span>
           </button>
-          <button id="btnSalvarProtocoloD1" class="px-4 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm cursor-pointer active:scale-95">
-            Salvar Alterações
+          <button type="button" id="btnSalvarProtocoloD1" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm cursor-pointer active:scale-95 flex items-center gap-1.5">
+            <svg class="icon-svg text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span>Salvar Alterações na Nuvem</span>
           </button>
         </div>
       </div>
@@ -767,6 +801,101 @@
   </div>
 
   <!-- ========================================== -->
+  <!-- MODAL: CADASTRAR / EDITAR ETAPA DO FLUXO   -->
+  <!-- ========================================== -->
+  <div id="modalEditarEtapa" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-900/40 backdrop-blur-xs hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+        <h2 id="modalEtapaTitulo" class="text-sm font-bold flex items-center gap-1.5">
+          <span>Configurar Etapa</span>
+        </h2>
+        <button type="button" id="btnCloseModalEtapa" class="text-white/80 hover:text-white text-lg font-bold cursor-pointer">&times;</button>
+      </div>
+      <form id="formEditarEtapa" class="p-4 flex flex-col gap-3 text-xs sm:text-sm">
+        <input type="hidden" id="editEtapaIndex" value="-1">
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Título da Etapa *</label>
+          <input type="text" id="editEtapaTitulo" required placeholder="Ex: Dilatação 1ª Gota" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold text-xs sm:text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Tipo de Ação *</label>
+          <select id="editEtapaTipo" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-bold text-xs sm:text-sm bg-slate-50 cursor-pointer">
+            <option value="drop">💧 Colírio / Dilatação (com timer)</option>
+            <option value="exam">🔬 Exame Clínico (Refração, Tonometria, etc.)</option>
+            <option value="doctor_ready">🩺 Liberação para o Consultório</option>
+          </select>
+        </div>
+
+        <!-- Campos específicos para Colírio -->
+        <div id="camposEtapaColirio" class="p-3 bg-teal-50/60 rounded-xl border border-teal-100 flex flex-col gap-2">
+          <div>
+            <label class="block text-[11px] font-bold text-teal-900 mb-1">Nome do Colírio</label>
+            <input type="text" id="editEtapaColirioNome" placeholder="Ex: Tropicamida 1%" class="w-full px-3 py-1.5 rounded-lg border border-teal-200 bg-white font-semibold text-xs">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-teal-900 mb-1">Gotas</label>
+              <input type="number" id="editEtapaGotas" min="1" max="10" value="1" class="w-full px-3 py-1.5 rounded-lg border border-teal-200 bg-white font-semibold text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-teal-900 mb-1">Timer (minutos de espera)</label>
+              <input type="number" id="editEtapaTimer" min="0" max="120" value="10" class="w-full px-3 py-1.5 rounded-lg border border-teal-200 bg-white font-semibold text-xs">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+          <button type="button" id="btnCancelModalEtapa" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-600 text-xs font-semibold cursor-pointer">
+            Cancelar
+          </button>
+          <button type="submit" class="px-4 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold cursor-pointer shadow-sm active:scale-95">
+            Salvar Etapa
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: CADASTRAR / RENOMEAR PROCEDIMENTO   -->
+  <!-- ========================================== -->
+  <div id="modalProcedimento" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-900/40 backdrop-blur-xs hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+        <h2 id="modalProcedimentoTitulo" class="text-sm font-bold">Novo Procedimento</h2>
+        <button type="button" id="btnCloseModalProcedimento" class="text-white/80 hover:text-white text-lg font-bold cursor-pointer">&times;</button>
+      </div>
+      <form id="formProcedimento" class="p-4 flex flex-col gap-3 text-xs sm:text-sm">
+        <input type="hidden" id="editProcedimentoModo" value="novo">
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Procedimento *</label>
+          <input type="text" id="editProcedimentoNome" required placeholder="Ex: Mapeamento de Retina" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold text-xs sm:text-sm">
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+          <div>
+            <span class="font-bold text-slate-800">Exige selecionar olho?</span>
+            <p class="text-[10px] text-slate-500">OD, OE ou AO (ex: cirurgias)</p>
+          </div>
+          <input type="checkbox" id="editProcedimentoPedeOlho" class="rounded text-brand-600">
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+          <button type="button" id="btnCancelModalProcedimento" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-600 text-xs font-semibold cursor-pointer">
+            Cancelar
+          </button>
+          <button type="submit" class="px-4 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold cursor-pointer shadow-sm active:scale-95">
+            Confirmar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
   <!-- JAVASCRIPT REALTIME CLOUDFLARE D1 & ENGINE -->
   <!-- ========================================== -->
   <script>
@@ -962,13 +1091,46 @@
     };
 
     // 3. PERSISTÊNCIA & CARREGAMENTO LOCAL
+    function sanitizarDadosClinica() {
+      if (!Array.isArray(state.doctors) || state.doctors.length === 0) {
+        state.doctors = JSON.parse(JSON.stringify(DEFAULT_DOCTORS));
+      }
+      if (!state.protocols || typeof state.protocols !== 'object' || Object.keys(state.protocols).length === 0) {
+        state.protocols = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS));
+      }
+
+      // Garante que cada médico tem protocolId e procedimentos válidos
+      state.doctors.forEach(d => {
+        if (!d.id) d.id = 'doc_' + Date.now();
+        if (!d.protocolId) d.protocolId = 'proto_' + d.id;
+        if (!state.protocols[d.protocolId] || !Array.isArray(state.protocols[d.protocolId].procedures) || state.protocols[d.protocolId].procedures.length === 0) {
+          state.protocols[d.protocolId] = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[d.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
+          state.protocols[d.protocolId].id = d.protocolId;
+          state.protocols[d.protocolId].doctorId = d.id;
+          state.protocols[d.protocolId].name = `Protocolos ${d.name}`;
+        }
+      });
+
+      // Garante IDs selecionados válidos
+      if (!state.doctors.some(d => d.id === state.setupSelectedDoctorId)) {
+        state.setupSelectedDoctorId = state.doctors[0].id;
+      }
+      const curDoc = state.doctors.find(d => d.id === state.setupSelectedDoctorId) || state.doctors[0];
+      const curProto = state.protocols[curDoc.protocolId] || state.protocols["proto_alvaro"];
+      if (!curProto.procedures.some(p => p.id === state.setupSelectedProcedureId)) {
+        state.setupSelectedProcedureId = curProto.procedures[0].id;
+      }
+    }
+
     function carregarLocal() {
       try {
         const storedDocs = localStorage.getItem('olhar_saude_doctors');
-        state.doctors = storedDocs ? JSON.parse(storedDocs) : DEFAULT_DOCTORS;
+        state.doctors = storedDocs ? JSON.parse(storedDocs) : JSON.parse(JSON.stringify(DEFAULT_DOCTORS));
 
         const storedProtos = localStorage.getItem('olhar_saude_protocols');
-        state.protocols = storedProtos ? JSON.parse(storedProtos) : DEFAULT_PROTOCOLS;
+        state.protocols = storedProtos ? JSON.parse(storedProtos) : JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS));
+
+        sanitizarDadosClinica();
 
         const storedPatients = localStorage.getItem('olhar_saude_pacientes_cloud_v5');
         if (storedPatients) {
@@ -976,13 +1138,40 @@
           state.patients = (Array.isArray(parsed) ? parsed : []).map(p => normalizarPaciente(p));
         }
       } catch (err) {
-        state.doctors = DEFAULT_DOCTORS;
-        state.protocols = DEFAULT_PROTOCOLS;
+        state.doctors = JSON.parse(JSON.stringify(DEFAULT_DOCTORS));
+        state.protocols = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS));
+        sanitizarDadosClinica();
         state.patients = [];
       }
     }
 
+    async function carregarConfigCloudflare() {
+      try {
+        const res = await fetch('/api/config');
+        if (res.ok) {
+          const data = await res.json();
+          let alterou = false;
+          if (data.doctors && Array.isArray(data.doctors) && data.doctors.length > 0) {
+            state.doctors = data.doctors;
+            alterou = true;
+          }
+          if (data.protocols && typeof data.protocols === 'object' && Object.keys(data.protocols).length > 0) {
+            state.protocols = data.protocols;
+            alterou = true;
+          }
+          sanitizarDadosClinica();
+          if (alterou) {
+            salvarLocal();
+            renderizarTudo();
+          }
+        }
+      } catch (e) {
+        console.warn('[Config D1]', e);
+      }
+    }
+
     function salvarLocal() {
+      sanitizarDadosClinica();
       localStorage.setItem('olhar_saude_doctors', JSON.stringify(state.doctors));
       localStorage.setItem('olhar_saude_protocols', JSON.stringify(state.protocols));
       localStorage.setItem('olhar_saude_pacientes_cloud_v5', JSON.stringify(state.patients));
@@ -1511,32 +1700,84 @@
     }
 
     // 9. RENDERIZAÇÃO DA VIEW 3: PROTOCOLOS & MÉDICOS
+    function getMedicoAtivoSetup() {
+      sanitizarDadosClinica();
+      return state.doctors.find(d => d.id === state.setupSelectedDoctorId) || state.doctors[0];
+    }
+
+    function getProtocoloAtivoSetup() {
+      const doc = getMedicoAtivoSetup();
+      let proto = state.protocols[doc.protocolId];
+      if (!proto || !proto.procedures || !proto.procedures.length) {
+        proto = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[doc.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
+        state.protocols[doc.protocolId] = proto;
+      }
+      return proto;
+    }
+
+    function getProcedimentoAtivoSetup() {
+      const proto = getProtocoloAtivoSetup();
+      let proc = proto.procedures.find(p => p.id === state.setupSelectedProcedureId);
+      if (!proc) {
+        proc = proto.procedures[0];
+        state.setupSelectedProcedureId = proc.id;
+      }
+      return proc;
+    }
+
+    function getPipelineAtivoSetup() {
+      const proc = getProcedimentoAtivoSetup();
+      if (!proc) return { pipeline: null, isRule: false, rule: null };
+
+      if (proc.pipeline && Array.isArray(proc.pipeline)) {
+        return { pipeline: proc.pipeline, isRule: false, rule: null };
+      }
+
+      if (proc.rules && Array.isArray(proc.rules) && proc.rules.length > 0) {
+        if (!state.setupSelectedRuleId || !proc.rules.some(r => r.ruleId === state.setupSelectedRuleId)) {
+          state.setupSelectedRuleId = proc.rules[0].ruleId;
+        }
+        let rule = proc.rules.find(r => r.ruleId === state.setupSelectedRuleId) || proc.rules[0];
+        if (!rule.pipeline) rule.pipeline = [];
+        return { pipeline: rule.pipeline, isRule: true, rule };
+      }
+
+      proc.pipeline = [];
+      return { pipeline: proc.pipeline, isRule: false, rule: null };
+    }
+
     function renderizarProtocolos() {
+      sanitizarDadosClinica();
+
+      // 1. Lista de Médicos
       const containerMedicos = document.getElementById('containerListaMedicos');
       if (containerMedicos) {
         containerMedicos.innerHTML = state.doctors.map(d => {
-          const diasTexto = d.schedule ? d.schedule.map(s => s.dayName).join(', ') : 'Dias não configurados';
+          const diasTexto = d.schedule && d.schedule.length > 0
+            ? d.schedule.map(s => s.dayName).join(', ')
+            : 'Dias não configurados';
           const isSelected = d.id === state.setupSelectedDoctorId;
 
           return `
-            <div class="p-4 rounded-2xl bg-white border ${isSelected ? 'border-brand-500 ring-2 ring-brand-100' : 'border-slate-200'} shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="p-4 rounded-2xl bg-white border ${isSelected ? 'border-brand-500 ring-2 ring-brand-100 shadow-sm' : 'border-slate-200'} shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition">
               <div>
                 <div class="flex items-center gap-2">
                   <h4 class="font-bold text-sm text-slate-900">${d.name}</h4>
                   ${d.crm ? `<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold">CRM: ${d.crm}</span>` : ''}
+                  ${isSelected ? `<span class="px-2 py-0.5 rounded-md bg-brand-100 text-brand-800 text-[10px] font-bold">Ativo no Editor</span>` : ''}
                 </div>
                 <p class="text-xs text-slate-500 mt-0.5">${d.specialty || 'Oftalmologia'} • Atendimento: <strong>${diasTexto}</strong></p>
               </div>
 
-              <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end">
-                <button onclick="window.selecionarMedicoParaEditarProtocolo('${d.id}')" class="px-3 py-1.5 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold cursor-pointer">
+              <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end flex-wrap">
+                <button onclick="window.selecionarMedicoParaEditarProtocolo('${d.id}')" class="px-3 py-1.5 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold cursor-pointer transition active:scale-95">
                   Editar Procedimentos
                 </button>
-                <button onclick="window.abrirModalEditarDadosMedico('${d.id}')" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold cursor-pointer">
+                <button onclick="window.abrirModalEditarDadosMedico('${d.id}')" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold cursor-pointer transition active:scale-95">
                   Editar Dados
                 </button>
                 ${state.doctors.length > 1 ? `
-                  <button onclick="window.excluirMedico('${d.id}')" class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer" title="Excluir Médico">
+                  <button onclick="window.excluirMedico('${d.id}')" class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer transition" title="Excluir Médico">
                     <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                   </button>
                 ` : ''}
@@ -1546,57 +1787,116 @@
         }).join('');
       }
 
-      // Seção de Procedimentos do Médico Selecionado
-      const doc = state.doctors.find(d => d.id === state.setupSelectedDoctorId) || state.doctors[0];
-      const proto = state.protocols[doc?.protocolId] || state.protocols["proto_alvaro"];
+      // 2. Dados do Médico Selecionado
+      const doc = getMedicoAtivoSetup();
+      const proto = getProtocoloAtivoSetup();
+      const activeProc = getProcedimentoAtivoSetup();
 
       const tituloEditor = document.getElementById('editorProtocoloTitulo');
-      if (tituloEditor && doc) {
+      if (tituloEditor) {
         tituloEditor.textContent = `Procedimentos & Fluxos - ${doc.name}`;
       }
 
-      // Preenche select de procedimentos do médico
+      // 3. Preenche select de procedimentos (GARANTIDO NUNCA EM BRANCO)
       const selectProc = document.getElementById('selectProcedimentoSetup');
-      if (selectProc && proto && proto.procedures) {
-        selectProc.innerHTML = proto.procedures.map(pr => `<option value="${pr.id}">${pr.label}</option>`).join('');
+      if (selectProc && proto.procedures) {
+        selectProc.innerHTML = proto.procedures.map(pr => `
+          <option value="${pr.id}" ${pr.id === state.setupSelectedProcedureId ? 'selected' : ''}>
+            ${pr.label}
+          </option>
+        `).join('');
         selectProc.value = state.setupSelectedProcedureId;
       }
 
-      const activeProc = proto?.procedures?.find(pr => pr.id === state.setupSelectedProcedureId) || proto?.procedures?.[0];
-      
-      // Checkbox pede olho
+      // 4. Checkbox pede olho
       const checkPedeOlho = document.getElementById('checkPedeOlhoSetup');
-      if (checkPedeOlho && activeProc) {
+      if (checkPedeOlho) {
         checkPedeOlho.checked = !!activeProc.pedeOlho;
       }
 
-      // Lista de Etapas do Procedimento
-      const stepsList = document.getElementById('pipelineStepsList');
-      if (stepsList && activeProc) {
-        let pipelineToRender = activeProc.pipeline;
-        if (!pipelineToRender && activeProc.rules) {
-          pipelineToRender = activeProc.rules[0]?.pipeline || [];
-        }
-
-        if (!pipelineToRender || pipelineToRender.length === 0) {
-          stepsList.innerHTML = '<p class="text-xs text-slate-400 italic p-2">Nenhuma etapa configurada para este procedimento.</p>';
+      // 5. Abas de Regras (se o procedimento possuir regras como Adulto vs Pediátrico)
+      const containerAbas = document.getElementById('containerAbasRegras');
+      if (containerAbas) {
+        if (activeProc.rules && activeProc.rules.length > 0) {
+          if (!state.setupSelectedRuleId || !activeProc.rules.some(r => r.ruleId === state.setupSelectedRuleId)) {
+            state.setupSelectedRuleId = activeProc.rules[0].ruleId;
+          }
+          containerAbas.innerHTML = activeProc.rules.map(r => {
+            const isAtiva = r.ruleId === state.setupSelectedRuleId;
+            return `
+              <button type="button" onclick="window.alternarRegraSetup('${r.ruleId}')" class="px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition ${isAtiva ? 'bg-brand-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                ${r.label}
+              </button>
+            `;
+          }).join('');
+          containerAbas.classList.remove('hidden');
         } else {
-          stepsList.innerHTML = pipelineToRender.map((st, idx) => `
-            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 text-xs">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-800 flex items-center justify-center font-bold text-xs">${idx + 1}</span>
-                <div>
-                  <strong class="text-slate-800">${st.title}</strong>
-                  <span class="text-slate-500 block text-[11px]">
-                    ${st.type === 'drop' ? `Colírio: ${st.dropName} (${st.dropsCount} gota, ${st.timerMinutes} min)` : (st.type === 'exam' ? 'Exame Clínico' : 'Liberação p/ Consultório')}
-                  </span>
+          containerAbas.classList.add('hidden');
+        }
+      }
+
+      // 6. Lista de Etapas do Procedimento / Regra Ativa
+      const { pipeline } = getPipelineAtivoSetup();
+      const stepsList = document.getElementById('pipelineStepsList');
+      const labelContagem = document.getElementById('labelContagemEtapas');
+
+      if (labelContagem) {
+        labelContagem.textContent = `${pipeline ? pipeline.length : 0} etapas`;
+      }
+
+      if (stepsList) {
+        if (!pipeline || pipeline.length === 0) {
+          stepsList.innerHTML = `
+            <div class="py-8 px-4 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 text-slate-400">
+              <p class="text-xs">Nenhuma etapa configurada para este procedimento.</p>
+              <p class="text-[11px] text-slate-400 mt-1">Toque no botão "+ Adicionar Etapa" abaixo para cadastrar um colírio ou exame.</p>
+            </div>
+          `;
+        } else {
+          stepsList.innerHTML = pipeline.map((st, idx) => {
+            const isPrimeira = idx === 0;
+            const isUltima = idx === pipeline.length - 1;
+
+            let badgeDesc = '';
+            if (st.type === 'drop') {
+              badgeDesc = `<span class="text-teal-700 font-semibold">💧 Colírio: ${st.dropName || 'Colírio'} (${st.dropsCount || 1} gota, timer de ${st.timerMinutes || 10} min)</span>`;
+            } else if (st.type === 'exam') {
+              badgeDesc = `<span class="text-sky-700 font-semibold">🔬 Exame Clínico</span>`;
+            } else {
+              badgeDesc = `<span class="text-slate-600 font-semibold">🩺 Liberação para Consultório</span>`;
+            }
+
+            return `
+              <div class="p-3 rounded-xl bg-white border border-slate-200 hover:border-brand-200 shadow-xs flex items-center justify-between gap-2 text-xs transition">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="w-6 h-6 rounded-full bg-brand-50 text-brand-700 flex items-center justify-center font-bold text-xs shrink-0 border border-brand-200">${idx + 1}</span>
+                  <div class="min-w-0">
+                    <strong class="text-slate-900 block truncate">${st.title}</strong>
+                    <div class="text-[11px] text-slate-500 mt-0.5 truncate">${badgeDesc}</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-1 shrink-0">
+                  <!-- Mover para Cima -->
+                  <button type="button" onclick="window.moverEtapaSetup(${idx}, -1)" ${isPrimeira ? 'disabled class="p-1.5 rounded text-slate-200 cursor-not-allowed"' : 'class="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer active:scale-90"'} title="Mover para Cima">
+                    <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+                  </button>
+                  <!-- Mover para Baixo -->
+                  <button type="button" onclick="window.moverEtapaSetup(${idx}, 1)" ${isUltima ? 'disabled class="p-1.5 rounded text-slate-200 cursor-not-allowed"' : 'class="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer active:scale-90"'} title="Mover para Baixo">
+                    <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <!-- Editar Etapa -->
+                  <button type="button" onclick="window.abrirModalEditarEtapa(${idx})" class="p-1.5 rounded-lg text-brand-600 hover:bg-brand-50 cursor-pointer ml-1 active:scale-90 font-bold" title="Editar Etapa">
+                    <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  </button>
+                  <!-- Excluir Etapa -->
+                  <button type="button" onclick="window.removerEtapaSetup(${idx})" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer active:scale-90" title="Remover Etapa">
+                    <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  </button>
                 </div>
               </div>
-              <button onclick="window.removerEtapaSetup(${idx})" class="p-1 rounded text-slate-400 hover:text-rose-600 cursor-pointer" title="Remover Etapa">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </button>
-            </div>
-          `).join('');
+            `;
+          }).join('');
         }
       }
     }
@@ -1709,12 +2009,131 @@
     window.selecionarMedicoParaEditarProtocolo = function(docId) {
       state.setupSelectedDoctorId = docId;
       const doc = state.doctors.find(d => d.id === docId);
-      const proto = state.protocols[doc?.protocolId];
-      if (proto && proto.procedures && proto.procedures.length) {
-        state.setupSelectedProcedureId = proto.procedures[0].id;
+      let proto = state.protocols[doc?.protocolId];
+      if (!proto || !proto.procedures || !proto.procedures.length) {
+        proto = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[doc?.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
+        state.protocols[doc?.protocolId] = proto;
       }
+      state.setupSelectedProcedureId = proto.procedures[0].id;
       renderizarProtocolos();
       document.getElementById('secaoEditorProtocolo')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.alternarRegraSetup = function(ruleId) {
+      state.setupSelectedRuleId = ruleId;
+      renderizarProtocolos();
+    };
+
+    window.moverEtapaSetup = function(stepIdx, direcao) {
+      const { pipeline } = getPipelineAtivoSetup();
+      if (!pipeline) return;
+      const targetIdx = stepIdx + direcao;
+      if (targetIdx < 0 || targetIdx >= pipeline.length) return;
+      
+      const temp = pipeline[stepIdx];
+      pipeline[stepIdx] = pipeline[targetIdx];
+      pipeline[targetIdx] = temp;
+      pipeline.forEach((s, i) => s.stepIndex = i);
+
+      salvarLocal();
+      renderizarProtocolos();
+    };
+
+    window.removerEtapaSetup = function(stepIdx) {
+      const { pipeline } = getPipelineAtivoSetup();
+      if (!pipeline) return;
+      if (pipeline.length <= 1) {
+        mostrarToast('O procedimento precisa ter ao menos uma etapa.');
+        return;
+      }
+
+      pipeline.splice(stepIdx, 1);
+      pipeline.forEach((s, i) => s.stepIndex = i);
+      salvarLocal();
+      renderizarProtocolos();
+      mostrarToast('Etapa removida.');
+    };
+
+    function atualizarVisibilidadeCamposEtapa() {
+      const tipo = document.getElementById('editEtapaTipo')?.value;
+      const camposColirio = document.getElementById('camposEtapaColirio');
+      if (camposColirio) {
+        if (tipo === 'drop') camposColirio.classList.remove('hidden');
+        else camposColirio.classList.add('hidden');
+      }
+    }
+
+    window.abrirModalEditarEtapa = function(stepIdx) {
+      const { pipeline } = getPipelineAtivoSetup();
+      if (!pipeline || !pipeline[stepIdx]) return;
+      const st = pipeline[stepIdx];
+
+      document.getElementById('modalEtapaTitulo').textContent = `Editar Etapa #${stepIdx + 1}`;
+      document.getElementById('editEtapaIndex').value = stepIdx;
+      document.getElementById('editEtapaTitulo').value = st.title || '';
+      document.getElementById('editEtapaTipo').value = st.type || 'drop';
+      document.getElementById('editEtapaColirioNome').value = st.dropName || '';
+      document.getElementById('editEtapaGotas').value = st.dropsCount !== undefined ? st.dropsCount : 1;
+      document.getElementById('editEtapaTimer').value = st.timerMinutes !== undefined ? st.timerMinutes : 10;
+      atualizarVisibilidadeCamposEtapa();
+
+      document.getElementById('modalEditarEtapa').classList.remove('hidden');
+      document.getElementById('editEtapaTitulo').focus();
+    };
+
+    window.abrirModalAdicionarEtapa = function() {
+      const { pipeline } = getPipelineAtivoSetup();
+      const nextIdx = pipeline ? pipeline.length : 0;
+
+      document.getElementById('modalEtapaTitulo').textContent = `Nova Etapa #${nextIdx + 1}`;
+      document.getElementById('editEtapaIndex').value = '-1';
+      document.getElementById('editEtapaTitulo').value = '';
+      document.getElementById('editEtapaTipo').value = 'drop';
+      document.getElementById('editEtapaColirioNome').value = 'Tropicamida 1%';
+      document.getElementById('editEtapaGotas').value = 1;
+      document.getElementById('editEtapaTimer').value = 10;
+      atualizarVisibilidadeCamposEtapa();
+
+      document.getElementById('modalEditarEtapa').classList.remove('hidden');
+      document.getElementById('editEtapaTitulo').focus();
+    };
+
+    window.abrirModalNovoProcedimento = function() {
+      document.getElementById('modalProcedimentoTitulo').textContent = 'Novo Procedimento';
+      document.getElementById('editProcedimentoModo').value = 'novo';
+      document.getElementById('editProcedimentoNome').value = '';
+      document.getElementById('editProcedimentoPedeOlho').checked = false;
+      document.getElementById('modalProcedimento').classList.remove('hidden');
+      document.getElementById('editProcedimentoNome').focus();
+    };
+
+    window.abrirModalRenomearProcedimento = function() {
+      const proc = getProcedimentoAtivoSetup();
+      if (!proc) return;
+      document.getElementById('modalProcedimentoTitulo').textContent = 'Renomear Procedimento';
+      document.getElementById('editProcedimentoModo').value = 'renomear';
+      document.getElementById('editProcedimentoNome').value = proc.label;
+      document.getElementById('editProcedimentoPedeOlho').checked = !!proc.pedeOlho;
+      document.getElementById('modalProcedimento').classList.remove('hidden');
+      document.getElementById('editProcedimentoNome').focus();
+    };
+
+    window.excluirProcedimentoAtual = function() {
+      const proto = getProtocoloAtivoSetup();
+      if (!proto || !proto.procedures || proto.procedures.length <= 1) {
+        mostrarToast('O médico deve ter pelo menos um procedimento cadastrado.');
+        return;
+      }
+      const proc = getProcedimentoAtivoSetup();
+      if (!proc) return;
+
+      if (confirm(`Deseja realmente excluir o procedimento "${proc.label}"?`)) {
+        proto.procedures = proto.procedures.filter(p => p.id !== proc.id);
+        state.setupSelectedProcedureId = proto.procedures[0].id;
+        salvarLocal();
+        renderizarProtocolos();
+        mostrarToast(`Procedimento "${proc.label}" removido.`);
+      }
     };
 
     window.abrirModalEditarDadosMedico = function(docId) {
@@ -1746,23 +2165,6 @@
         salvarLocal();
         renderizarProtocolos();
         mostrarToast('Médico removido.');
-      }
-    };
-
-    window.removerEtapaSetup = function(stepIdx) {
-      const doc = state.doctors.find(d => d.id === state.setupSelectedDoctorId) || state.doctors[0];
-      const proto = state.protocols[doc?.protocolId];
-      const proc = proto?.procedures?.find(pr => pr.id === state.setupSelectedProcedureId);
-
-      let pipe = proc?.pipeline;
-      if (!pipe && proc?.rules) pipe = proc.rules[0]?.pipeline;
-
-      if (pipe && pipe.length > 1) {
-        pipe.splice(stepIdx, 1);
-        salvarLocal();
-        renderizarProtocolos();
-      } else {
-        mostrarToast('O fluxo precisa ter ao menos uma etapa.');
       }
     };
 
@@ -1810,6 +2212,7 @@
     // 11. INICIALIZAÇÃO E EVENTOS
     document.addEventListener('DOMContentLoaded', async () => {
       carregarLocal();
+      await carregarConfigCloudflare();
 
       // Menu 3 Pontinhos
       const btnMenuDots = document.getElementById('btnMenuDots');
@@ -1834,9 +2237,7 @@
 
       // Checkbox pede olho no setup
       document.getElementById('checkPedeOlhoSetup')?.addEventListener('change', (e) => {
-        const doc = state.doctors.find(d => d.id === state.setupSelectedDoctorId) || state.doctors[0];
-        const proto = state.protocols[doc?.protocolId];
-        const proc = proto?.procedures?.find(pr => pr.id === state.setupSelectedProcedureId);
+        const proc = getProcedimentoAtivoSetup();
         if (proc) {
           proc.pedeOlho = e.target.checked;
           salvarLocal();
@@ -1844,34 +2245,123 @@
         }
       });
 
-      // Adicionar Etapa ao Pipeline no Setup
-      document.getElementById('btnAddStepToPipeline')?.addEventListener('click', () => {
-        const doc = state.doctors.find(d => d.id === state.setupSelectedDoctorId) || state.doctors[0];
-        const proto = state.protocols[doc?.protocolId];
-        const proc = proto?.procedures?.find(pr => pr.id === state.setupSelectedProcedureId);
+      // Botões do Procedimento (Novo, Renomear, Excluir)
+      document.getElementById('btnNovoProcedimentoSetup')?.addEventListener('click', window.abrirModalNovoProcedimento);
+      document.getElementById('btnRenomearProcedimentoSetup')?.addEventListener('click', window.abrirModalRenomearProcedimento);
+      document.getElementById('btnExcluirProcedimentoSetup')?.addEventListener('click', window.excluirProcedimentoAtual);
 
-        let pipe = proc?.pipeline;
-        if (!pipe && proc?.rules) pipe = proc.rules[0]?.pipeline;
+      // Submissão do Modal de Procedimento
+      document.getElementById('formProcedimento')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const modo = document.getElementById('editProcedimentoModo').value;
+        const nome = document.getElementById('editProcedimentoNome').value.trim();
+        const pedeOlho = document.getElementById('editProcedimentoPedeOlho').checked;
+        const proto = getProtocoloAtivoSetup();
+        if (!proto || !proto.procedures) return;
 
-        if (pipe) {
-          pipe.push({
-            stepIndex: pipe.length,
-            type: 'drop',
-            title: `Dilatação ${pipe.length + 1}ª Gota`,
-            dropName: 'Tropicamida 1%',
-            dropsCount: 1,
-            timerMinutes: 10
+        if (modo === 'novo') {
+          const newId = 'proc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+          proto.procedures.push({
+            id: newId,
+            label: nome,
+            pedeOlho: pedeOlho,
+            pipeline: [
+              { stepIndex: 0, type: 'exam', title: nome },
+              { stepIndex: 1, type: 'doctor_ready', title: 'Liberar para Consultório' }
+            ]
           });
-          salvarLocal();
-          renderizarProtocolos();
-          mostrarToast('Nova etapa adicionada.');
+          state.setupSelectedProcedureId = newId;
+          mostrarToast(`Procedimento "${nome}" criado com sucesso!`);
+        } else {
+          const proc = proto.procedures.find(p => p.id === state.setupSelectedProcedureId);
+          if (proc) {
+            proc.label = nome;
+            proc.pedeOlho = pedeOlho;
+            mostrarToast(`Procedimento renomeado para "${nome}"!`);
+          }
         }
-      });
 
-      // Salvar Protocolo
-      document.getElementById('btnSalvarProtocoloD1')?.addEventListener('click', () => {
         salvarLocal();
-        mostrarToast('Protocolo salvo com sucesso!');
+        document.getElementById('modalProcedimento').classList.add('hidden');
+        renderizarProtocolos();
+      });
+      document.getElementById('btnCloseModalProcedimento')?.addEventListener('click', () => document.getElementById('modalProcedimento').classList.add('hidden'));
+      document.getElementById('btnCancelModalProcedimento')?.addEventListener('click', () => document.getElementById('modalProcedimento').classList.add('hidden'));
+
+      // Botão Adicionar Etapa
+      document.getElementById('btnAddStepToPipeline')?.addEventListener('click', window.abrirModalAdicionarEtapa);
+
+      // Tipo de Etapa no Modal
+      document.getElementById('editEtapaTipo')?.addEventListener('change', atualizarVisibilidadeCamposEtapa);
+
+      // Submissão do Modal de Etapa
+      document.getElementById('formEditarEtapa')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const { pipeline } = getPipelineAtivoSetup();
+        if (!pipeline) return;
+
+        const idx = parseInt(document.getElementById('editEtapaIndex').value, 10);
+        const titulo = document.getElementById('editEtapaTitulo').value.trim();
+        const tipo = document.getElementById('editEtapaTipo').value;
+        const colirio = document.getElementById('editEtapaColirioNome').value.trim();
+        const gotas = parseInt(document.getElementById('editEtapaGotas').value, 10) || 1;
+        const timer = parseInt(document.getElementById('editEtapaTimer').value, 10) || 0;
+
+        const stepData = {
+          stepIndex: idx >= 0 ? idx : pipeline.length,
+          type: tipo,
+          title: titulo
+        };
+
+        if (tipo === 'drop') {
+          stepData.dropName = colirio || 'Colírio';
+          stepData.dropsCount = gotas;
+          stepData.timerMinutes = timer;
+        } else if (tipo === 'exam') {
+          stepData.examCode = 'exam_' + Date.now();
+        }
+
+        if (idx >= 0 && idx < pipeline.length) {
+          pipeline[idx] = stepData;
+        } else {
+          pipeline.push(stepData);
+        }
+
+        pipeline.forEach((s, i) => s.stepIndex = i);
+        salvarLocal();
+        document.getElementById('modalEditarEtapa').classList.add('hidden');
+        renderizarProtocolos();
+        mostrarToast('Etapa configurada com sucesso!');
+      });
+      document.getElementById('btnCloseModalEtapa')?.addEventListener('click', () => document.getElementById('modalEditarEtapa').classList.add('hidden'));
+      document.getElementById('btnCancelModalEtapa')?.addEventListener('click', () => document.getElementById('modalEditarEtapa').classList.add('hidden'));
+
+      // Salvar Protocolo na Nuvem Cloudflare D1
+      document.getElementById('btnSalvarProtocoloD1')?.addEventListener('click', async () => {
+        salvarLocal();
+        setCloudStatus('syncing');
+        try {
+          const res = await fetch('/api/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              doctors: state.doctors,
+              protocols: state.protocols
+            })
+          });
+          if (res.ok) {
+            setCloudStatus('online');
+            mostrarToast('Alterações salvas na nuvem Cloudflare!');
+          } else {
+            mostrarToast('Salvo localmente (erro ao sincronizar D1).');
+          }
+        } catch (err) {
+          mostrarToast('Salvo localmente (modo offline).');
+        }
+
+        if (window.BroadcastChannel) {
+          try { new BroadcastChannel('olhar_saude_sync').postMessage({ type: 'config_updated' }); } catch(e) {}
+        }
       });
 
       // Modal Cadastrar Médico
@@ -1931,16 +2421,24 @@
       // MODAL NOVO PACIENTE (ENXUTO E INTELIGENTE)
       const modalNovo = document.getElementById('modalNovoPaciente');
       document.getElementById('btnOpenModalNovo')?.addEventListener('click', () => {
+        sanitizarDadosClinica();
+
         // 1. Detecta automaticamente médico e turno de hoje
         const { doctor, shiftId, shiftLabel } = detectarMedicoETurnoAtual();
-        document.getElementById('labelMedicoAutomatico').textContent = doctor.name;
+        document.getElementById('labelMedicoAutomatico').textContent = doctor ? doctor.name : 'Dr. Álvaro';
         document.getElementById('labelTurnoAutomatico').textContent = shiftLabel;
 
-        // 2. Preenche os procedimentos daquele médico
-        const proto = state.protocols[doctor.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"];
+        // 2. Preenche os procedimentos daquele médico (GARANTIDO NUNCA EM BRANCO)
+        let proto = state.protocols[doctor?.protocolId];
+        if (!proto || !proto.procedures || !proto.procedures.length) {
+          proto = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[doctor?.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
+          if (doctor && doctor.protocolId) state.protocols[doctor.protocolId] = proto;
+        }
+
         const selectProc = document.getElementById('novoProcedimento');
         if (selectProc && proto && proto.procedures) {
           selectProc.innerHTML = proto.procedures.map(pr => `<option value="${pr.id}">${pr.label}</option>`).join('');
+          selectProc.value = proto.procedures[0].id;
         }
 
         document.getElementById('novoNome').value = '';
@@ -1956,8 +2454,13 @@
 
       function atualizarCamposNovoPaciente() {
         const { doctor } = detectarMedicoETurnoAtual();
-        const proto = state.protocols[doctor.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"];
-        const procId = document.getElementById('novoProcedimento')?.value || 'consulta';
+        let proto = state.protocols[doctor?.protocolId];
+        if (!proto || !proto.procedures || !proto.procedures.length) {
+          proto = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[doctor?.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
+        }
+
+        const selectProc = document.getElementById('novoProcedimento');
+        const procId = selectProc?.value || proto?.procedures?.[0]?.id || 'consulta';
         const proc = proto?.procedures?.find(pr => pr.id === procId) || proto?.procedures?.[0];
 
         // Se o procedimento exige olho (ex: Cirurgia), exibe o campo
