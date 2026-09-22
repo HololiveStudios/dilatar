@@ -1,19 +1,15 @@
-﻿{
+{
   "id": "/",
-  "name": "OftalmoFlow",
-  "short_name": "OftalmoFlow",
-  "description": "Sistemapara controle de fluxo de pacientes em clínicas.",
+  "name": "Olhar Saúde - Fluxo de Pacientes",
+  "short_name": "Olhar Saúde",
+  "description": "Sistema ultracompacto para controle de fluxo e dilatação de pacientes - Clínica Olhar Saúde.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#f8fafc",
   "theme_color": "#0d9488",
-  "categories": [
-    "medical",
-    "productivity",
-    "utilities"
-  ],
+  "categories": ["medical", "productivity", "utilities"],
   "prefer_related_applications": false,
   "icons": [
     {
@@ -58,7 +54,14 @@
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "OftalmoFlow no Celular"
+      "label": "Olhar Saúde no Celular"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Olhar Saúde no Computador"
     }
   ],
   "shortcuts": [

@@ -1,15 +1,16 @@
-﻿/**
- * OftalmoFlow - Service Worker (sw.js)
+/**
+ * Olhar Saúde - Service Worker (sw.js)
  * Estratégia de Caching Offline-First + Bypass Direto para API Cloudflare
  */
 
-const CACHE_NAME = 'oftalmoflow-cache-v5';
+const CACHE_NAME = 'olharsaude-cache-v8';
 
 // Recursos estáticos pré-cacheados (carregamento 0ms e offline)
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/header.png',
   '/icon.svg',
   '/pwa-192x192.png',
   '/pwa-512x512.png',

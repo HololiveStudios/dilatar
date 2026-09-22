@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Cloudflare Pages Functions - /api/pacientes
  * Suporte completo a CRUD com Cloudflare D1
  */
@@ -24,7 +24,7 @@ export async function onRequestGet({ env }) {
 
     const { results } = await db.prepare(
       `SELECT * FROM pacientes 
-       ORDER BY CASE WHEN status = 'atendimento' THEN 0 ELSE 1 END, timestamp_criacao DESC`
+       ORDER BY CASE WHEN status = 'retorno_triagem' THEN 0 WHEN status = 'atendimento' OR status = 'triagem_dilatando' OR status = 'triagem_aguardando' THEN 1 ELSE 2 END, timestamp_criacao DESC`
     ).all();
 
     return new Response(JSON.stringify(results || []), { headers: JSON_HEADERS });
@@ -42,14 +42,15 @@ export async function onRequestPost({ env, request }) {
 
     const p = await request.json();
     const agora = Date.now();
+    const dadosExtrasStr = typeof p.dados_extras === 'string' ? p.dados_extras : JSON.stringify(p.dados_extras || {});
 
     await db.prepare(
       `INSERT OR REPLACE INTO pacientes (
         id, nome, idade, tipo, tipoExame, periodo, olhos,
         etapa, status, timestamp_criacao, timestamp_gota1,
         timestamp_gota2, timestamp_finalizado, pressaoOcularOD,
-        pressaoOcularOE, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        pressaoOcularOE, updated_at, medico, dados_extras
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       p.id,
       p.nome || '',
@@ -59,14 +60,16 @@ export async function onRequestPost({ env, request }) {
       p.periodo || '',
       p.olhos || '',
       p.etapa || 1,
-      p.status || 'atendimento',
+      p.status || 'triagem_aguardando',
       p.timestamp_criacao || agora,
       p.timestamp_gota1 || null,
       p.timestamp_gota2 || null,
       p.timestamp_finalizado || null,
       p.pressaoOcularOD || '',
       p.pressaoOcularOE || '',
-      agora
+      agora,
+      p.medico || p.doctorName || '',
+      dadosExtrasStr
     ).run();
 
     return new Response(JSON.stringify({ success: true, id: p.id, updated_at: agora }), { headers: JSON_HEADERS });
@@ -84,13 +87,14 @@ export async function onRequestPut({ env, request }) {
 
     const p = await request.json();
     const agora = Date.now();
+    const dadosExtrasStr = typeof p.dados_extras === 'string' ? p.dados_extras : JSON.stringify(p.dados_extras || {});
 
     await db.prepare(
       `UPDATE pacientes SET 
         nome = ?, idade = ?, tipo = ?, tipoExame = ?, periodo = ?, olhos = ?,
         etapa = ?, status = ?, timestamp_gota1 = ?, timestamp_gota2 = ?,
         timestamp_finalizado = ?, pressaoOcularOD = ?, pressaoOcularOE = ?,
-        updated_at = ?
+        updated_at = ?, medico = ?, dados_extras = ?
        WHERE id = ?`
     ).bind(
       p.nome || '',
@@ -100,13 +104,15 @@ export async function onRequestPut({ env, request }) {
       p.periodo || '',
       p.olhos || '',
       p.etapa || 1,
-      p.status || 'atendimento',
+      p.status || 'triagem_aguardando',
       p.timestamp_gota1 || null,
       p.timestamp_gota2 || null,
       p.timestamp_finalizado || null,
       p.pressaoOcularOD || '',
       p.pressaoOcularOE || '',
       agora,
+      p.medico || p.doctorName || '',
+      dadosExtrasStr,
       p.id
     ).run();
 
