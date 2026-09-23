@@ -1,5 +1,6 @@
 {
   "id": "/",
+  "version": "1.0.0",
   "name": "Olhar Saúde - Fluxo de Pacientes",
   "short_name": "Olhar Saúde",
   "description": "Sistema ultracompacto para controle de fluxo e dilatação de pacientes - Clínica Olhar Saúde.",
@@ -7,7 +8,7 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#f8fafc",
+  "background_color": "#ffffff",
   "theme_color": "#0d9488",
   "categories": ["medical", "productivity", "utilities"],
   "prefer_related_applications": false,

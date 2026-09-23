@@ -3,7 +3,7 @@
  * Estratégia de Caching Offline-First + Bypass Direto para API Cloudflare
  */
 
-const CACHE_NAME = 'olharsaude-cache-v9';
+const CACHE_NAME = 'olharsaude-cache-v11';
 
 // Recursos estáticos pré-cacheados (carregamento 0ms e offline)
 const PRECACHE_ASSETS = [
