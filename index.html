@@ -308,45 +308,26 @@
       <!-- Logo Horizontal Olhar Saúde Centralizada -->
       <img src="/header.png?v=11" alt="Olhar Saúde" class="h-9 sm:h-11 w-auto max-w-[70%] sm:max-w-md object-contain select-none cursor-pointer" style="height: 38px; max-height: 44px; width: auto; object-fit: contain;" onclick="window.navegarPara('triagem')">
 
-      <!-- Canto Direito: Status Realtime D1 + Menu 3 Pontinhos Discreto -->
+      <!-- Canto Direito: Status Realtime D1 + Botão de Troca de Página -->
       <div class="absolute right-3 sm:right-6 flex items-center gap-2">
         <!-- Indicador Realtime Cloudflare D1 -->
         <span id="cloudStatusDot" class="w-2 h-2 rounded-full bg-emerald-500 inline-block shrink-0 transition" title="Sincronizado com Cloudflare D1 em tempo real" style="width: 7px; height: 7px;"></span>
 
-        <!-- Botão 3 Pontinhos -->
-        <div class="relative">
-          <button id="btnMenuDots" type="button" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition active:scale-95 cursor-pointer" title="Menu de Navegação" aria-label="Menu de Navegação">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="5" r="2"/>
-              <circle cx="12" cy="12" r="2"/>
-              <circle cx="12" cy="19" r="2"/>
-            </svg>
-          </button>
-
-          <!-- Dropdown Flutuante -->
-          <div id="dropdownMenu" class="hidden absolute right-0 mt-1.5 w-56 bg-white rounded-2xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs font-semibold">
-            <button onclick="window.navegarPara('triagem')" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-brand-700 cursor-pointer text-left">
-              <svg class="icon-svg text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14l2 2 4-4"/></svg>
-              <span>Fila de Triagem</span>
-            </button>
-            <button onclick="window.navegarPara('consultorio')" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-brand-700 cursor-pointer text-left">
-              <svg class="icon-svg text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h1M9 13h1M9 17h1"/></svg>
-              <span>Consultório Médico</span>
-            </button>
-            <div class="my-1 border-t border-slate-100"></div>
-            <button onclick="window.navegarPara('protocolos')" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-brand-700 cursor-pointer text-left">
-              <svg class="icon-svg text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>Médicos & Protocolos</span>
-            </button>
-          </div>
-        </div>
+        <!-- Botão de Troca de Página (Triagem <-> Médicos & Protocolos) -->
+        <button id="btnAlternarView" type="button" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-brand-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-xs" title="Alternar entre Triagem e Controle de Médicos/Protocolos">
+          <svg id="iconAlternarView" class="w-4 h-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span id="labelAlternarView" class="hidden sm:inline">Médicos & Protocolos</span>
+        </button>
       </div>
 
     </div>
   </header>
 
   <!-- ========================================== -->
-  <!-- CONTEÚDO PRINCIPAL (3 TELAS DINÂMICAS)    -->
+  <!-- CONTEÚDO PRINCIPAL (TELAS DINÂMICAS)       -->
   <!-- ========================================== -->
   <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-2 sm:py-3 flex flex-col gap-2">
 
@@ -355,20 +336,24 @@
     <!-- ========================================== -->
     <div id="viewTriagem" class="flex flex-col gap-2">
       
-      <!-- Barra Rápida: Contadores + Botão Limpar -->
-      <div class="flex items-center justify-between px-1 py-1 text-xs text-slate-500">
-        <div class="flex items-center gap-3">
-          <span class="font-semibold text-slate-700 flex items-center gap-1">
-            <span class="rounded-full bg-brand-600 inline-block" style="width: 7px; height: 7px;"></span> Na Fila: <strong id="countAtivos" class="text-slate-900 ml-0.5">0</strong>
-          </span>
-          <span class="text-slate-300">|</span>
-          <span class="text-slate-600 flex items-center gap-1">
-            <span class="rounded-full bg-amber-500 inline-block" style="width: 7px; height: 7px;"></span> Dilatando: <strong id="countDilatando" class="text-amber-700 ml-0.5">0</strong>
-          </span>
-          <span class="text-slate-300">|</span>
-          <span class="text-slate-500 flex items-center gap-1">
-            <span class="rounded-full bg-slate-400 inline-block" style="width: 7px; height: 7px;"></span> Concluídos: <strong id="countFinalizados" class="text-slate-700 ml-0.5">0</strong>
-          </span>
+      <!-- Barra Rápida: Apenas Símbolos e Números + Botão Limpar -->
+      <div class="flex items-center justify-between px-1 py-1 text-xs">
+        <div class="flex items-center gap-2">
+          <!-- Na Fila -->
+          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 shadow-xs" title="Pacientes na Fila">
+            <svg class="w-3.5 h-3.5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <strong id="countAtivos" class="text-slate-900 font-bold text-xs">0</strong>
+          </div>
+          <!-- Dilatando -->
+          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50/70 border border-amber-200 shadow-xs" title="Em Dilatação">
+            <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            <strong id="countDilatando" class="text-amber-800 font-bold text-xs">0</strong>
+          </div>
+          <!-- Concluídos -->
+          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 shadow-xs" title="Concluídos">
+            <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <strong id="countFinalizados" class="text-slate-700 font-bold text-xs">0</strong>
+          </div>
         </div>
 
         <button type="button" id="btnAbrirModalLimpar" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-rose-600 font-semibold text-[11px] shadow-sm transition active:scale-95 cursor-pointer">
@@ -393,122 +378,87 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- VIEW 2: CONSULTÓRIO DO MÉDICO              -->
-    <!-- ========================================== -->
-    <div id="viewConsultorio" class="hidden flex flex-col gap-3 pb-24">
-      
-      <!-- Barra Superior com Voltar -->
-      <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 shadow-sm">
-        <button onclick="window.navegarPara('triagem')" class="flex items-center gap-1.5 text-xs font-bold text-brand-700 hover:text-brand-800 cursor-pointer">
-          <span>← Voltar para Fila de Triagem</span>
-        </button>
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-slate-500">Médico:</span>
-          <select id="selectDoctorConsultorio" class="text-xs font-bold text-slate-800 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1 cursor-pointer">
-            <!-- Opções dos médicos -->
-          </select>
-        </div>
-      </div>
-
-      <!-- SEÇÃO: PACIENTE ATUAL EM CONSULTA -->
-      <div id="secaoPacienteEmAtendimento" class="hidden flex flex-col gap-2">
-        <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Paciente em Consulta Agora</h2>
-        <div id="cardPacienteEmAtendimento" class="p-4 bg-white rounded-2xl border-2 border-emerald-500 shadow-md">
-          <!-- Injetado dinamicamente -->
-        </div>
-      </div>
-
-      <!-- SEÇÃO: FILA DE ESPERA DO MÉDICO -->
-      <div class="flex flex-col gap-2">
-        <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Aguardando Consulta Médica</h2>
-        <div id="containerConsultorioEspera" class="flex flex-col gap-2">
-          <!-- Injetado dinamicamente -->
-        </div>
-        
-        <div id="emptyConsultorioEspera" class="hidden py-12 px-4 text-center bg-white rounded-2xl border border-dashed border-slate-300">
-          <p class="text-xs text-slate-500 font-medium">Nenhum paciente aguardando consulta no momento para este médico.</p>
-        </div>
-      </div>
-
-      <!-- SEÇÃO: PACIENTES EM RETORNO / EXAMES EXTRAS -->
-      <div class="flex flex-col gap-2">
-        <h2 class="text-xs font-bold text-amber-700 uppercase tracking-wider px-1 flex items-center gap-1.5">
-          <span>⚠️ Pacientes em Retorno à Triagem</span>
-        </h2>
-        <div id="containerConsultorioRetorno" class="flex flex-col gap-2">
-          <!-- Injetado dinamicamente -->
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ========================================== -->
-    <!-- VIEW 3: GERENCIAR MÉDICOS & PROTOCOLOS     -->
+    <!-- VIEW 2: GERENCIAR MÉDICOS & PROTOCOLOS     -->
     <!-- ========================================== -->
     <div id="viewProtocolos" class="hidden flex flex-col gap-3 pb-24">
       
-      <!-- Barra Superior com Voltar -->
-      <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 shadow-sm">
-        <button onclick="window.navegarPara('triagem')" class="flex items-center gap-1.5 text-xs font-bold text-brand-700 hover:text-brand-800 cursor-pointer">
-          <span>← Voltar para Fila de Triagem</span>
+      <!-- Barra Superior com Voltar e Novo Médico -->
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+        <button onclick="window.navegarPara('triagem')" class="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-brand-700 transition cursor-pointer">
+          <svg class="w-4 h-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Voltar para Fila</span>
         </button>
-        <button id="btnAbrirModalNovoMedico" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs cursor-pointer flex items-center gap-1 shadow-sm">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        <button id="btnAbrirModalNovoMedico" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs cursor-pointer flex items-center gap-1.5 shadow-sm transition active:scale-95">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
           <span>Novo Médico</span>
         </button>
       </div>
 
       <!-- LISTA DE MÉDICOS CADASTRADOS -->
       <div class="flex flex-col gap-2">
-        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider px-1">Médicos e Procedimentos Cadastrados</h3>
-        <div id="containerListaMedicos" class="flex flex-col gap-3">
+        <div class="flex items-center justify-between px-1">
+          <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Corpo Clínico & Escala de Atendimento</h3>
+          <span id="labelTotalMedicos" class="text-[11px] font-semibold text-slate-400">2 médicos</span>
+        </div>
+        <div id="containerListaMedicos" class="flex flex-col gap-2.5">
           <!-- Injetado dinamicamente -->
         </div>
       </div>
 
-      <!-- EDITOR DE PROCEDIMENTOS / PROTOCOLO DO MÉDICO -->
-      <div id="secaoEditorProtocolo" class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3.5">
+      <!-- EDITOR DE PROCEDIMENTOS / PROTOCOLO DO MÉDICO ATIVO -->
+      <div id="secaoEditorProtocolo" class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
         
+        <!-- Header do Editor com Médico Ativo -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider">Configuração de Fluxos Clínicos</span>
-            <h3 id="editorProtocoloTitulo" class="text-sm sm:text-base font-bold text-slate-900">Procedimentos do Médico</h3>
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center font-bold text-sm shrink-0 border border-brand-200">
+              🩺
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-brand-700 uppercase tracking-wider block">Fluxo Clínico & Protocolo</span>
+              <h3 id="editorProtocoloTitulo" class="text-sm sm:text-base font-bold text-slate-900 leading-tight">Procedimentos do Médico</h3>
+            </div>
           </div>
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <button type="button" id="btnNovoProcedimentoSetup" class="px-2.5 py-1.5 rounded-xl bg-brand-50 hover:bg-brand-100 border border-brand-300 text-brand-700 text-xs font-bold flex items-center gap-1 cursor-pointer">
-              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-              <span>+ Novo Procedimento</span>
-            </button>
-          </div>
+          <button type="button" id="btnNovoProcedimentoSetup" class="px-3 py-1.5 rounded-xl bg-brand-50 hover:bg-brand-100 border border-brand-300 text-brand-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer self-start sm:self-auto transition active:scale-95">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            <span>+ Novo Procedimento</span>
+          </button>
         </div>
 
-        <!-- Seletor do Procedimento Ativo + Ações de Renomear e Excluir -->
-        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div class="flex items-center gap-2 flex-1 min-w-0">
-            <label for="selectProcedimentoSetup" class="text-xs font-bold text-slate-600 shrink-0">Procedimento:</label>
-            <select id="selectProcedimentoSetup" class="flex-1 max-w-sm px-3 py-1.5 text-xs sm:text-sm font-bold text-slate-800 bg-white border border-slate-300 rounded-lg cursor-pointer">
-              <!-- Injetado dinamicamente garantido -->
-            </select>
+        <!-- Seletor Visual dos Procedimentos (Tabs/Pills Interativas) -->
+        <div class="flex flex-col gap-2">
+          <span class="text-xs font-bold text-slate-700">Selecione o Procedimento para Configurar:</span>
+          
+          <div id="containerPillsProcedimentos" class="flex items-center gap-1.5 flex-wrap">
+            <!-- Injetado dinamicamente com botões clicáveis de procedimentos -->
           </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <button type="button" id="btnRenomearProcedimentoSetup" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer flex items-center gap-1" title="Renomear procedimento selecionado">
-              <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              <span>Renomear</span>
-            </button>
-            <button type="button" id="btnExcluirProcedimentoSetup" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 text-xs font-bold cursor-pointer flex items-center gap-1" title="Excluir procedimento selecionado">
-              <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              <span>Excluir</span>
-            </button>
+
+          <!-- Ações do Procedimento Selecionado -->
+          <div class="flex items-center justify-between gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs mt-1">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="font-bold text-slate-600 shrink-0">Ativo:</span>
+              <strong id="labelProcedimentoAtivoNome" class="text-slate-900 truncate">Consulta Geral</strong>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" id="btnRenomearProcedimentoSetup" class="px-2.5 py-1 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer flex items-center gap-1 transition active:scale-95" title="Renomear procedimento selecionado">
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span>Renomear</span>
+              </button>
+              <button type="button" id="btnExcluirProcedimentoSetup" class="px-2.5 py-1 rounded-lg border border-slate-300 bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 text-xs font-bold cursor-pointer flex items-center gap-1 transition active:scale-95" title="Excluir procedimento selecionado">
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Excluir</span>
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- Opção se este procedimento exige perguntar Olho -->
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
           <div>
-            <span class="font-bold text-slate-800">Exigir Seleção do Olho (OD / OE / AO)?</span>
-            <p class="text-[11px] text-slate-500">Ative para cirurgias e procedimentos específicos de um olho.</p>
+            <span class="font-bold text-slate-800 block">Exigir Seleção do Olho (OD / OE / AO)?</span>
+            <p class="text-[11px] text-slate-500">Ative para cirurgias, injeções ou procedimentos específicos de um olho.</p>
           </div>
-          <label class="flex items-center gap-1.5 cursor-pointer font-bold text-slate-700">
+          <label class="flex items-center gap-1.5 cursor-pointer font-bold text-slate-700 shrink-0">
             <input type="checkbox" id="checkPedeOlhoSetup" class="rounded text-brand-600">
             <span>Sim, perguntar</span>
           </label>
@@ -519,10 +469,10 @@
           <!-- Injetado dinamicamente -->
         </div>
 
-        <!-- Lista de Etapas Configurada -->
+        <!-- Lista de Etapas Configurada (Timeline Clínica) -->
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between px-1">
-            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Sequência de Etapas:</span>
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Sequência de Etapas Clínicas:</span>
             <span id="labelContagemEtapas" class="text-[11px] font-semibold text-slate-400">0 etapas</span>
           </div>
           <div id="pipelineStepsList" class="flex flex-col gap-2">
@@ -530,12 +480,13 @@
           </div>
         </div>
 
+        <!-- Ações do Rodapé do Editor -->
         <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
-          <button type="button" id="btnAddStepToPipeline" class="px-3 py-2 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm">
+          <button type="button" id="btnAddStepToPipeline" class="px-3.5 py-2 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm transition">
             <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
             <span>+ Adicionar Etapa</span>
           </button>
-          <button type="button" id="btnSalvarProtocoloD1" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm cursor-pointer active:scale-95 flex items-center gap-1.5">
+          <button type="button" id="btnSalvarProtocoloD1" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm cursor-pointer active:scale-95 flex items-center gap-1.5 transition">
             <svg class="icon-svg text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             <span>Salvar Alterações na Nuvem</span>
           </button>
@@ -560,65 +511,68 @@
   <div id="toastNotification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transform translate-y-16 opacity-0 transition-all duration-200 pointer-events-none flex items-center gap-1.5 px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold bg-slate-900 text-white"></div>
 
   <!-- ========================================== -->
-  <!-- MODAL: NOVO PACIENTE ULTRA-ENXUTO          -->
+  <!-- MODAL: NOVO ATENDIMENTO ULTRA-COMPACTO     -->
   <!-- ========================================== -->
-  <div id="modalNovoPaciente" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-900/40 backdrop-blur-xs hidden">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+  <div id="modalNovoPaciente" class="fixed inset-0 z-50 flex items-start justify-center p-3 pt-4 sm:pt-8 bg-slate-900/40 backdrop-blur-xs overflow-y-auto hidden">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
       
-      <div class="p-4 border-b border-slate-100 flex items-center justify-between" style="background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);">
-        <h2 class="text-sm font-bold text-white flex items-center gap-1.5">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-          Novo Atendimento
-        </h2>
-        <button type="button" id="btnCloseModalNovo" class="text-white/80 hover:text-white text-lg font-bold p-1 cursor-pointer">&times;</button>
+      <!-- Top Bar Compacta com Título e Fechar (X) -->
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          <span>Novo Atendimento</span>
+        </span>
+        <button type="button" id="btnCloseModalNovo" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition active:scale-90 cursor-pointer" title="Fechar (Esc)" aria-label="Fechar">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
 
       <form id="formNovoPaciente" class="p-4 flex flex-col gap-3 text-xs sm:text-sm">
         
-        <!-- Campo 1: Nome (Obrigatório) -->
+        <!-- Campo 1: Nome com Botão de Colar -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Paciente *</label>
-          <input type="text" id="novoNome" required placeholder="Digite o nome completo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm">
+          <div class="relative flex items-center">
+            <input type="text" id="novoNome" required placeholder="Digite ou cole o nome" class="w-full pl-3 pr-20 py-2.5 rounded-xl border border-slate-300 font-semibold text-xs sm:text-sm focus:border-brand-500">
+            <button type="button" id="btnColarNome" class="absolute right-1.5 px-2.5 py-1.5 rounded-lg text-brand-700 hover:bg-brand-50 font-bold text-xs flex items-center gap-1 cursor-pointer transition active:scale-95" title="Colar nome da área de transferência">
+              <svg class="w-3.5 h-3.5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+              <span>Colar</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Campo 2: Idade (Opcional) -->
+        <!-- Campo 2: Escolha de Médico (Exibido SOMENTE quando houver mais de 1 médico disponível) -->
+        <div id="campoSelecaoMedicoContainer" class="hidden">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Médico Atendente *</label>
+          <select id="novoMedicoSelect" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 font-bold text-xs sm:text-sm bg-white cursor-pointer">
+            <!-- Injetado dinamicamente quando > 1 médico -->
+          </select>
+        </div>
+
+        <!-- Campo 3: Idade (Opcional) -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">
             Idade (anos) <span class="text-slate-400 font-normal">(opcional)</span>
           </label>
-          <input type="number" id="novoIdade" placeholder="Ex: 35 (deixe em branco se não souber)" min="0" max="125" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold">
+          <input type="number" id="novoIdade" placeholder="Ex: 35 (deixe em branco se não souber)" min="0" max="125" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold text-xs sm:text-sm">
         </div>
 
-        <!-- Campo 3: Procedimento / O que veio fazer -->
+        <!-- Campo 4: Procedimento / Tipo de Atendimento -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Procedimento / Tipo de Atendimento *</label>
-          <select id="novoProcedimento" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-bold text-xs sm:text-sm bg-slate-50 cursor-pointer">
-            <!-- Injetado dinamicamente com base no médico do dia -->
+          <select id="novoProcedimento" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 font-bold text-xs sm:text-sm bg-slate-50 cursor-pointer">
+            <!-- Injetado dinamicamente -->
           </select>
         </div>
 
-        <!-- Campo 4: Olho (Apenas se o procedimento exigir!) -->
+        <!-- Campo 5: Olho (Apenas se o procedimento exigir!) -->
         <div id="campoOlhosContainer" class="hidden">
           <label class="block text-xs font-bold text-rose-700 mb-1">Olho a Operar / Tratar *</label>
-          <select id="novoOlhos" class="w-full px-3 py-2 rounded-xl border border-rose-300 bg-rose-50 font-bold text-xs sm:text-sm">
+          <select id="novoOlhos" class="w-full px-3 py-2 rounded-xl border border-rose-300 bg-rose-50 font-bold text-xs sm:text-sm cursor-pointer">
             <option value="OD">OD (Olho Direito)</option>
             <option value="OE">OE (Olho Esquerdo)</option>
             <option value="AO" selected>AO (Ambos os Olhos)</option>
           </select>
-        </div>
-
-        <!-- Rodapé Automático: Médico e Turno do Dia -->
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs flex flex-col gap-1">
-          <div class="flex items-center justify-between text-[11px] text-slate-600">
-            <span class="font-bold flex items-center gap-1">
-              <span>🩺 Médico:</span>
-              <span id="labelMedicoAutomatico" class="text-brand-700">Dr. Álvaro</span>
-            </span>
-            <span id="labelTurnoAutomatico" class="bg-slate-200 px-2 py-0.5 rounded text-slate-700 font-bold">Manhã</span>
-          </div>
-          <p id="previewFluxoPassos" class="text-[11px] text-slate-500 mt-1 leading-snug">
-            Carregando fluxo de etapas...
-          </p>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
@@ -636,16 +590,16 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL: CADASTRAR / EDITAR MÉDICO           -->
+  <!-- MODAL: CADASTRAR / EDITAR MÉDICO & HORÁRIOS-->
   <!-- ========================================== -->
-  <div id="modalEditarMedico" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-900/40 backdrop-blur-xs hidden">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+  <div id="modalEditarMedico" class="fixed inset-0 z-50 flex items-start justify-center p-3 pt-4 sm:pt-8 bg-slate-900/40 backdrop-blur-xs overflow-y-auto hidden">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
       
-      <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+      <div class="px-4 py-3 bg-slate-900 text-white flex items-center justify-between">
         <h2 id="modalMedicoTitulo" class="text-sm font-bold flex items-center gap-1.5">
           <span>Cadastrar / Editar Médico</span>
         </h2>
-        <button type="button" id="btnCloseModalMedico" class="text-white/80 hover:text-white text-lg font-bold cursor-pointer">&times;</button>
+        <button type="button" id="btnCloseModalMedico" class="text-white/80 hover:text-white text-lg font-bold cursor-pointer w-8 h-8 rounded-full flex items-center justify-center">&times;</button>
       </div>
 
       <form id="formEditarMedico" class="p-4 flex flex-col gap-3 text-xs sm:text-sm">
@@ -653,41 +607,28 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo do Médico *</label>
-          <input type="text" id="editMedicoNome" required placeholder="Ex: Dr. Carlos Eduardo" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold">
+          <input type="text" id="editMedicoNome" required placeholder="Ex: Dr. Carlos Eduardo" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold text-xs sm:text-sm">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">CRM</label>
-            <input type="text" id="editMedicoCRM" placeholder="Ex: 12345-CE" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold">
+            <input type="text" id="editMedicoCRM" placeholder="Ex: 12345-CE" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold text-xs sm:text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Especialidade</label>
-            <input type="text" id="editMedicoEspecialidade" placeholder="Ex: Geral, Cirurgia" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold">
+            <input type="text" id="editMedicoEspecialidade" placeholder="Ex: Geral, Cirurgia" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold text-xs sm:text-sm">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Dias de Atendimento na Clínica:</label>
-          <div class="grid grid-cols-3 gap-1.5 text-xs">
-            <label class="flex items-center gap-1 p-1 bg-slate-50 rounded-lg cursor-pointer">
-              <input type="checkbox" name="editDias" value="1"> <span>Segunda</span>
-            </label>
-            <label class="flex items-center gap-1 p-1 bg-slate-50 rounded-lg cursor-pointer">
-              <input type="checkbox" name="editDias" value="2"> <span>Terça</span>
-            </label>
-            <label class="flex items-center gap-1 p-1 bg-slate-50 rounded-lg cursor-pointer">
-              <input type="checkbox" name="editDias" value="3"> <span>Quarta</span>
-            </label>
-            <label class="flex items-center gap-1 p-1 bg-slate-50 rounded-lg cursor-pointer">
-              <input type="checkbox" name="editDias" value="4"> <span>Quinta</span>
-            </label>
-            <label class="flex items-center gap-1 p-1 bg-slate-50 rounded-lg cursor-pointer">
-              <input type="checkbox" name="editDias" value="5"> <span>Sexta</span>
-            </label>
-            <label class="flex items-center gap-1 p-1 bg-slate-50 rounded-lg cursor-pointer">
-              <input type="checkbox" name="editDias" value="6"> <span>Sábado</span>
-            </label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700">Escala de Atendimento & Horários:</label>
+            <span class="text-[10px] text-slate-400">Manhã (M) / Tarde (T)</span>
+          </div>
+          <p class="text-[11px] text-slate-500 mb-2">Marque os dias e turnos em que este médico atende na clínica:</p>
+          <div class="flex flex-col gap-1.5 max-h-56 overflow-y-auto pr-1" id="gradeHorariosMedico">
+            <!-- Injetado dinamicamente com toggles de Manhã e Tarde por dia -->
           </div>
         </div>
 
@@ -695,68 +636,8 @@
           <button type="button" id="btnCancelModalMedico" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-600 text-xs font-semibold cursor-pointer">
             Cancelar
           </button>
-          <button type="submit" class="px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer shadow-sm">
+          <button type="submit" class="px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer shadow-sm active:scale-95">
             Salvar Médico
-          </button>
-        </div>
-      </form>
-
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- MODAL: MÉDICO SOLICITA RETORNO À TRIAGEM   -->
-  <!-- ========================================== -->
-  <div id="modalRetornoMedico" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-900/40 backdrop-blur-xs hidden">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
-      
-      <div class="p-4 bg-amber-500 text-white flex items-center justify-between">
-        <h2 class="text-sm font-bold flex items-center gap-1.5">
-          <span>⚠️ Solicitar Retorno à Triagem</span>
-        </h2>
-        <button type="button" id="btnCloseModalRetorno" class="text-white/80 hover:text-white text-lg font-bold cursor-pointer">&times;</button>
-      </div>
-
-      <form id="formRetornoMedico" class="p-4 flex flex-col gap-3 text-xs sm:text-sm">
-        <input type="hidden" id="retornoPacienteId">
-        
-        <p class="text-xs text-slate-600">
-          O paciente <strong id="retornoPacienteNome" class="text-slate-900"></strong> retornará imediatamente para a tela da enfermagem com as novas solicitações.
-        </p>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">Exames ou Procedimentos Complementares:</label>
-          <div class="flex flex-col gap-1.5">
-            <label class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer text-xs">
-              <input type="checkbox" name="retornoExame" value="Tonometria de Aplanação OD/OE" class="rounded text-brand-600">
-              <span>Tonometria de Aplanação OD/OE</span>
-            </label>
-            <label class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer text-xs">
-              <input type="checkbox" name="retornoExame" value="Mapeamento de Retina" class="rounded text-brand-600">
-              <span>Mapeamento de Retina</span>
-            </label>
-            <label class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer text-xs">
-              <input type="checkbox" name="retornoExame" value="Dilatação Adicional (+ 1 Gota)" class="rounded text-brand-600">
-              <span>Dilatação Adicional (+ 1 Gota)</span>
-            </label>
-            <label class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer text-xs">
-              <input type="checkbox" name="retornoExame" value="Campimetria / Campo Visual" class="rounded text-brand-600">
-              <span>Campimetria / Campo Visual</span>
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Observações Clínicas p/ a Enfermagem:</label>
-          <textarea id="retornoObservacoes" rows="2" placeholder="Ex: Aguardar 15 min antes de medir a pressão ocular." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs"></textarea>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-          <button type="button" id="btnCancelModalRetorno" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-600 text-xs font-semibold cursor-pointer">
-            Cancelar
-          </button>
-          <button type="submit" class="px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold cursor-pointer active:scale-95 shadow-sm">
-            Enviar à Triagem Agora
           </button>
         </div>
       </form>
@@ -936,8 +817,9 @@
         crm: "12345-CE",
         specialty: "Oftalmologia Geral & Cirurgia",
         schedule: [
-          { dayOfWeek: 3, dayName: "Quarta-feira", shifts: [{ id: "manha", label: "Manhã" }, { id: "tarde", label: "Tarde" }] },
-          { dayOfWeek: 1, dayName: "Segunda-feira", shifts: [{ id: "manha", label: "Manhã" }] }
+          { dayOfWeek: 1, dayName: "Segunda-feira", shifts: ["manha", "tarde"] },
+          { dayOfWeek: 3, dayName: "Quarta-feira", shifts: ["manha", "tarde"] },
+          { dayOfWeek: 5, dayName: "Sexta-feira", shifts: ["manha"] }
         ],
         protocolId: "proto_alvaro"
       },
@@ -947,8 +829,9 @@
         crm: "67890-CE",
         specialty: "Oftalmologia & Refrativa",
         schedule: [
-          { dayOfWeek: 4, dayName: "Quinta-feira", shifts: [{ id: "manha", label: "Manhã" }, { id: "tarde", label: "Tarde" }] },
-          { dayOfWeek: 2, dayName: "Terça-feira", shifts: [{ id: "tarde", label: "Tarde" }] }
+          { dayOfWeek: 1, dayName: "Segunda-feira", shifts: ["tarde"] },
+          { dayOfWeek: 2, dayName: "Terça-feira", shifts: ["tarde"] },
+          { dayOfWeek: 4, dayName: "Quinta-feira", shifts: ["manha", "tarde"] }
         ],
         protocolId: "proto_iza"
       }
@@ -1107,10 +990,18 @@
         state.protocols = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS));
       }
 
-      // Garante que cada médico tem protocolId e procedimentos válidos
+      // Garante que cada médico tem protocolId, escala com turnos e procedimentos válidos
       state.doctors.forEach(d => {
         if (!d.id) d.id = 'doc_' + Date.now();
         if (!d.protocolId) d.protocolId = 'proto_' + d.id;
+        if (!Array.isArray(d.schedule)) d.schedule = [];
+        d.schedule.forEach(s => {
+          if (!Array.isArray(s.shifts) || s.shifts.length === 0) {
+            s.shifts = ['manha', 'tarde'];
+          } else {
+            s.shifts = s.shifts.map(sh => typeof sh === 'string' ? sh : (sh.id || 'manha'));
+          }
+        });
         if (!state.protocols[d.protocolId] || !Array.isArray(state.protocols[d.protocolId].procedures) || state.protocols[d.protocolId].procedures.length === 0) {
           state.protocols[d.protocolId] = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[d.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
           state.protocols[d.protocolId].id = d.protocolId;
@@ -1222,28 +1113,43 @@
       };
     }
 
-    // 4. DETECÇÃO AUTOMÁTICA DE MÉDICO E TURNO
-    function detectarMedicoETurnoAtual() {
+    // 4. DETECÇÃO DE MÉDICOS, ESCALAS E HORÁRIOS
+    function medicoAtendeNoTurno(doctor, dayOfWeek, shiftId) {
+      if (!doctor || !Array.isArray(doctor.schedule)) return false;
+      const daySched = doctor.schedule.find(s => Number(s.dayOfWeek) === Number(dayOfWeek));
+      if (!daySched || !Array.isArray(daySched.shifts) || daySched.shifts.length === 0) return false;
+      return daySched.shifts.some(sh => {
+        const sId = typeof sh === 'string' ? sh : (sh.id || '');
+        return sId === shiftId;
+      });
+    }
+
+    function obterMedicosDisponiveisAgora() {
       const now = new Date();
-      const dayOfWeek = now.getDay();
+      const dayOfWeek = now.getDay(); // 0 = Domingo, 1 = Segunda, ...
       const hour = now.getHours();
       const shiftId = hour < 13 ? 'manha' : 'tarde';
       const shiftLabel = hour < 13 ? 'Manhã' : 'Tarde';
 
-      let doctor = state.doctors.find(d => {
-        return d.schedule && d.schedule.some(s => s.dayOfWeek === dayOfWeek && s.shifts.some(sh => sh.id === shiftId));
-      });
+      // 1. Médicos escalados para este dia e turno específico
+      let medicos = state.doctors.filter(d => medicoAtendeNoTurno(d, dayOfWeek, shiftId));
 
-      if (!doctor) {
-        doctor = state.doctors.find(d => {
-          return d.schedule && d.schedule.some(s => s.dayOfWeek === dayOfWeek);
-        });
+      // 2. Se nenhum médico escalado no turno específico, busca os escalados no dia
+      if (medicos.length === 0) {
+        medicos = state.doctors.filter(d => d.schedule && d.schedule.some(s => Number(s.dayOfWeek) === Number(dayOfWeek)));
       }
 
-      if (!doctor) {
-        doctor = state.doctors[0] || DEFAULT_DOCTORS[0];
+      // 3. Fallback se nenhum no dia: todos os médicos cadastrados
+      if (medicos.length === 0) {
+        medicos = [...state.doctors];
       }
 
+      return { medicos, shiftId, shiftLabel, dayOfWeek };
+    }
+
+    function detectarMedicoETurnoAtual() {
+      const { medicos, shiftId, shiftLabel } = obterMedicosDisponiveisAgora();
+      const doctor = medicos.find(d => d.id === state.selectedDoctorId) || medicos[0] || state.doctors[0] || DEFAULT_DOCTORS[0];
       return { doctor, shiftId, shiftLabel };
     }
 
@@ -1518,21 +1424,12 @@
           </button>
         `;
       } else if (isConsultorio) {
-        if (p.status === 'consultorio_em_atendimento') {
-          etapaLabelHTML = `<span class="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[11px] flex items-center gap-1">🩺 Em Atendimento</span>`;
-          botaoAcaoHTML = `
-            <button onclick="window.finalizarConsulta('${p.id}')" class="h-7 sm:h-7.5 px-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 shadow-xs cursor-pointer active:scale-95">
-              <span>Concluir</span> <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            </button>
-          `;
-        } else {
-          etapaLabelHTML = `<span class="text-sky-700 font-semibold bg-sky-50 px-2 py-0.5 rounded border border-sky-200 text-[11px] flex items-center gap-1">⏳ Fila do Consultório</span>`;
-          botaoAcaoHTML = `
-            <button onclick="window.chamarParaConsultorio('${p.id}')" class="h-7 sm:h-7.5 px-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center gap-1 shadow-xs cursor-pointer active:scale-95">
-              <span>Chamar</span> <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </button>
-          `;
-        }
+        etapaLabelHTML = `<span class="text-sky-700 font-semibold bg-sky-50 px-2 py-0.5 rounded border border-sky-200 text-[11px] flex items-center gap-1">🩺 Consultório: ${p.doctorName || 'Médico'}</span>`;
+        botaoAcaoHTML = `
+          <button onclick="window.finalizarConsulta('${p.id}')" class="h-7 sm:h-7.5 px-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 shadow-xs cursor-pointer active:scale-95" title="Concluir Atendimento">
+            <span>Concluir</span> <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          </button>
+        `;
       } else if (currentStep) {
         const stepProg = p.stepsProgress?.[p.currentStepIndex] || {};
         const isRunning = stepProg.status === 'running' && stepProg.timerEndsAt;
@@ -1624,106 +1521,7 @@
       `;
     }
 
-    // 8. RENDERIZAÇÃO DA VIEW 2: CONSULTÓRIO
-    function renderizarConsultorio() {
-      const selectDoc = document.getElementById('selectDoctorConsultorio');
-      if (selectDoc) {
-        selectDoc.innerHTML = state.doctors.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
-        selectDoc.value = state.selectedDoctorId;
-      }
-
-      const activeDoctorId = selectDoc ? selectDoc.value : state.selectedDoctorId;
-      const pacientesDoMedico = state.patients.filter(p => p.doctorId === activeDoctorId);
-
-      const emConsulta = pacientesDoMedico.find(p => p.status === 'consultorio_em_atendimento');
-      const aguardando = pacientesDoMedico.filter(p => p.status === 'consultorio_aguardando');
-      const retorno = pacientesDoMedico.filter(p => p.status === 'retorno_triagem');
-
-      const secaoAtendimento = document.getElementById('secaoPacienteEmAtendimento');
-      const cardAtendimento = document.getElementById('cardPacienteEmAtendimento');
-
-      if (emConsulta) {
-        secaoAtendimento.classList.remove('hidden');
-        cardAtendimento.innerHTML = `
-          <div class="flex flex-col gap-3">
-            <div class="flex items-start justify-between">
-              <div>
-                <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">Atendimento em Andamento</span>
-                <h3 class="text-base font-bold text-slate-900 mt-1">${emConsulta.name}</h3>
-                <p class="text-xs text-slate-500">${emConsulta.age ? emConsulta.age + ' anos • ' : ''}Procedimento: <strong>${emConsulta.procedureLabel || 'Consulta'}</strong> ${emConsulta.eyes ? '• Olho: ' + emConsulta.eyes : ''}</p>
-              </div>
-              <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200">
-                Em Consulta
-              </span>
-            </div>
-
-            ${emConsulta.tonometryOD || emConsulta.tonometryOE ? `
-              <div class="p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-center gap-4">
-                <span class="font-bold text-slate-700">Pressão Ocular:</span>
-                <span>OD: <strong class="text-brand-700">${emConsulta.tonometryOD || '--'} mmHg</strong></span>
-                <span>OE: <strong class="text-brand-700">${emConsulta.tonometryOE || '--'} mmHg</strong></span>
-              </div>
-            ` : ''}
-
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
-              <button onclick="window.abrirModalRetorno('${emConsulta.id}')" class="px-3.5 py-2 rounded-xl border border-amber-500 text-amber-800 bg-amber-50 hover:bg-amber-100 font-bold text-xs cursor-pointer active:scale-95">
-                ⚠️ Solicitar Retorno à Triagem
-              </button>
-              <button onclick="window.finalizarConsulta('${emConsulta.id}')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm cursor-pointer active:scale-95">
-                Finalizar Consulta
-              </button>
-            </div>
-          </div>
-        `;
-      } else {
-        secaoAtendimento.classList.add('hidden');
-      }
-
-      const containerEspera = document.getElementById('containerConsultorioEspera');
-      const emptyEspera = document.getElementById('emptyConsultorioEspera');
-
-      if (aguardando.length === 0) {
-        containerEspera.innerHTML = '';
-        emptyEspera.classList.remove('hidden');
-      } else {
-        emptyEspera.classList.add('hidden');
-        containerEspera.innerHTML = aguardando.map(p => `
-          <div class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-between gap-2">
-            <div class="min-w-0">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <h4 class="font-bold text-xs sm:text-sm text-slate-900 truncate">${p.name}</h4>
-                ${p.age ? `<span class="text-[11px] text-slate-400 font-normal">• ${p.age}a</span>` : ''}
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-brand-50 text-brand-700 border border-brand-200">${p.procedureLabel || 'Consulta'}</span>
-                ${p.eyes ? `<span class="px-1.5 py-0.2 rounded text-[10px] font-extrabold bg-rose-100 text-rose-800">${p.eyes}</span>` : ''}
-              </div>
-              <p class="text-[11px] text-slate-400 mt-0.5">Aguardando no consultório</p>
-            </div>
-            <button onclick="window.chamarParaConsultorio('${p.id}')" class="h-7 sm:h-7.5 px-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center gap-1 shadow-xs cursor-pointer active:scale-95 shrink-0">
-              <span>Chamar</span> <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-        `).join('');
-      }
-
-      const containerRetorno = document.getElementById('containerConsultorioRetorno');
-      if (containerRetorno) {
-        if (retorno.length === 0) {
-          containerRetorno.innerHTML = '<p class="text-xs text-slate-400 italic px-2">Nenhum paciente aguardando retorno na triagem.</p>';
-        } else {
-          containerRetorno.innerHTML = retorno.map(p => `
-            <div class="p-2 sm:px-3 sm:py-2 rounded-xl bg-amber-50/70 border border-amber-200 flex items-center justify-between gap-2 text-xs">
-              <div class="min-w-0">
-                <span class="font-bold text-slate-900 truncate">${p.name}</span>
-                <p class="text-[11px] text-amber-800 mt-0.5 truncate">Pendente: ${p.doctorCycle?.returnReason || 'Exames complementares'}</p>
-              </div>
-              <span class="px-2 py-0.5 rounded-md bg-amber-200 text-amber-900 font-bold text-[10px] shrink-0">Na Triagem</span>
-            </div>
-          `).join('');
-        }
-      }
-    }
-
-    // 9. RENDERIZAÇÃO DA VIEW 3: PROTOCOLOS & MÉDICOS
+    // 8. RENDERIZAÇÃO DA VIEW: PROTOCOLOS & MÉDICOS
     function getMedicoAtivoSetup() {
       sanitizarDadosClinica();
       return state.doctors.find(d => d.id === state.setupSelectedDoctorId) || state.doctors[0];
@@ -1770,38 +1568,58 @@
       return { pipeline: proc.pipeline, isRule: false, rule: null };
     }
 
+    window.selecionarProcedimentoSetup = function(procId) {
+      state.setupSelectedProcedureId = procId;
+      renderizarProtocolos();
+    };
+
     function renderizarProtocolos() {
       sanitizarDadosClinica();
+
+      const labelTotal = document.getElementById('labelTotalMedicos');
+      if (labelTotal) {
+        labelTotal.textContent = `${state.doctors.length} médico${state.doctors.length > 1 ? 's' : ''}`;
+      }
 
       // 1. Lista de Médicos
       const containerMedicos = document.getElementById('containerListaMedicos');
       if (containerMedicos) {
+        const nomesDias = { 1: 'Seg', 2: 'Ter', 3: 'Qua', 4: 'Qui', 5: 'Sex', 6: 'Sáb', 0: 'Dom' };
         containerMedicos.innerHTML = state.doctors.map(d => {
-          const diasTexto = d.schedule && d.schedule.length > 0
-            ? d.schedule.map(s => s.dayName).join(', ')
-            : 'Dias não configurados';
+          const diasTexto = (d.schedule && d.schedule.length > 0)
+            ? d.schedule.map(s => {
+                const dNome = nomesDias[s.dayOfWeek] || s.dayName || 'Dia';
+                const turnos = (s.shifts || []).map(sh => (typeof sh === 'string' ? sh : sh.id) === 'manha' ? 'Manhã' : 'Tarde').join('+');
+                return `${dNome} (${turnos || 'Atendimento'})`;
+              }).join(' • ')
+            : 'Escala não configurada';
+
           const isSelected = d.id === state.setupSelectedDoctorId;
 
           return `
-            <div class="p-4 rounded-2xl bg-white border ${isSelected ? 'border-brand-500 ring-2 ring-brand-100 shadow-sm' : 'border-slate-200'} shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition">
-              <div>
-                <div class="flex items-center gap-2">
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-white border ${isSelected ? 'border-brand-500 ring-2 ring-brand-100 shadow-sm' : 'border-slate-200'} shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
                   <h4 class="font-bold text-sm text-slate-900">${d.name}</h4>
                   ${d.crm ? `<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold">CRM: ${d.crm}</span>` : ''}
-                  ${isSelected ? `<span class="px-2 py-0.5 rounded-md bg-brand-100 text-brand-800 text-[10px] font-bold">Ativo no Editor</span>` : ''}
+                  ${isSelected ? `<span class="px-2 py-0.5 rounded-md bg-brand-100 text-brand-800 text-[10px] font-bold flex items-center gap-1"><span>●</span> Ativo no Editor</span>` : ''}
                 </div>
-                <p class="text-xs text-slate-500 mt-0.5">${d.specialty || 'Oftalmologia'} • Atendimento: <strong>${diasTexto}</strong></p>
+                <div class="flex items-center gap-2 mt-1 text-xs text-slate-500 flex-wrap">
+                  <span>${d.specialty || 'Oftalmologia Geral'}</span>
+                  <span class="text-slate-300">•</span>
+                  <span class="font-medium text-slate-700 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">🗓️ ${diasTexto}</span>
+                </div>
               </div>
 
-              <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end flex-wrap">
-                <button onclick="window.selecionarMedicoParaEditarProtocolo('${d.id}')" class="px-3 py-1.5 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold cursor-pointer transition active:scale-95">
-                  Editar Procedimentos
+              <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end flex-wrap shrink-0">
+                <button onclick="window.selecionarMedicoParaEditarProtocolo('${d.id}')" class="px-3 py-1.5 rounded-xl border border-brand-500 text-brand-700 bg-brand-50 hover:bg-brand-100 text-xs font-bold cursor-pointer transition active:scale-95 shadow-2xs">
+                  Procedimentos
                 </button>
-                <button onclick="window.abrirModalEditarDadosMedico('${d.id}')" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold cursor-pointer transition active:scale-95">
-                  Editar Dados
+                <button onclick="window.abrirModalEditarDadosMedico('${d.id}')" class="px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold cursor-pointer transition active:scale-95 shadow-2xs">
+                  Escala & Horários
                 </button>
                 ${state.doctors.length > 1 ? `
-                  <button onclick="window.excluirMedico('${d.id}')" class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer transition" title="Excluir Médico">
+                  <button onclick="window.excluirMedico('${d.id}')" class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer transition active:scale-90" title="Excluir Médico">
                     <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                   </button>
                 ` : ''}
@@ -1818,18 +1636,29 @@
 
       const tituloEditor = document.getElementById('editorProtocoloTitulo');
       if (tituloEditor) {
-        tituloEditor.textContent = `Procedimentos & Fluxos - ${doc.name}`;
+        tituloEditor.textContent = `Procedimentos & Fluxos - ${doc.name} ${doc.crm ? '(' + doc.crm + ')' : ''}`;
       }
 
-      // 3. Preenche select de procedimentos (GARANTIDO NUNCA EM BRANCO)
-      const selectProc = document.getElementById('selectProcedimentoSetup');
-      if (selectProc && proto.procedures) {
-        selectProc.innerHTML = proto.procedures.map(pr => `
-          <option value="${pr.id}" ${pr.id === state.setupSelectedProcedureId ? 'selected' : ''}>
-            ${pr.label}
-          </option>
-        `).join('');
-        selectProc.value = state.setupSelectedProcedureId;
+      // 3. Renderiza Pills de Procedimentos Interativas
+      const containerPills = document.getElementById('containerPillsProcedimentos');
+      if (containerPills && proto.procedures) {
+        containerPills.innerHTML = proto.procedures.map(pr => {
+          const isSel = pr.id === state.setupSelectedProcedureId;
+          const badgeOlho = pr.pedeOlho ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-rose-100 text-rose-800 ml-1">Olho</span>` : '';
+          const qtdEtapas = pr.pipeline ? pr.pipeline.length : (pr.rules ? pr.rules[0]?.pipeline?.length || 0 : 0);
+          return `
+            <button type="button" onclick="window.selecionarProcedimentoSetup('${pr.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition active:scale-95 flex items-center gap-1.5 ${isSel ? 'bg-brand-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+              <span>${pr.label}</span>
+              <span class="${isSel ? 'bg-brand-700 text-white/90' : 'bg-slate-200 text-slate-600'} px-1.5 py-0.2 rounded-full text-[10px]">${qtdEtapas}</span>
+              ${badgeOlho}
+            </button>
+          `;
+        }).join('');
+      }
+
+      const labelProcNome = document.getElementById('labelProcedimentoAtivoNome');
+      if (labelProcNome) {
+        labelProcNome.textContent = activeProc.label;
       }
 
       // 4. Checkbox pede olho
@@ -1881,21 +1710,28 @@
             const isPrimeira = idx === 0;
             const isUltima = idx === pipeline.length - 1;
 
+            let iconeEtapa = '📋';
             let badgeDesc = '';
             if (st.type === 'drop') {
-              badgeDesc = `<span class="text-teal-700 font-semibold">💧 Colírio: ${st.dropName || 'Colírio'} (${st.dropsCount || 1} gota, timer de ${st.timerMinutes || 10} min)</span>`;
+              iconeEtapa = '💧';
+              badgeDesc = `<span class="text-teal-700 font-semibold">Colírio: ${st.dropName || 'Colírio'} (${st.dropsCount || 1} gota, timer de ${st.timerMinutes || 10} min)</span>`;
             } else if (st.type === 'exam') {
-              badgeDesc = `<span class="text-sky-700 font-semibold">🔬 Exame Clínico</span>`;
+              iconeEtapa = '🔬';
+              badgeDesc = `<span class="text-sky-700 font-semibold">Exame Clínico de Consultório</span>`;
             } else {
-              badgeDesc = `<span class="text-slate-600 font-semibold">🩺 Liberação para Consultório</span>`;
+              iconeEtapa = '🩺';
+              badgeDesc = `<span class="text-slate-600 font-semibold">Liberação direta para o Consultório</span>`;
             }
 
             return `
-              <div class="p-3 rounded-xl bg-white border border-slate-200 hover:border-brand-200 shadow-xs flex items-center justify-between gap-2 text-xs transition">
-                <div class="flex items-center gap-3 min-w-0">
+              <div class="p-3 rounded-xl bg-white border border-slate-200 hover:border-brand-300 shadow-xs flex items-center justify-between gap-2 text-xs transition">
+                <div class="flex items-center gap-2.5 min-w-0">
                   <span class="w-6 h-6 rounded-full bg-brand-50 text-brand-700 flex items-center justify-center font-bold text-xs shrink-0 border border-brand-200">${idx + 1}</span>
                   <div class="min-w-0">
-                    <strong class="text-slate-900 block truncate">${st.title}</strong>
+                    <strong class="text-slate-900 block truncate flex items-center gap-1.5">
+                      <span>${iconeEtapa}</span>
+                      <span>${st.title}</span>
+                    </strong>
                     <div class="text-[11px] text-slate-500 mt-0.5 truncate">${badgeDesc}</div>
                   </div>
                 </div>
@@ -1925,24 +1761,32 @@
       }
     }
 
-    // 10. AÇÕES DO SISTEMA
+    // 9. AÇÕES DO SISTEMA
     window.navegarPara = function(tabName) {
-      state.activeTab = tabName;
-      document.getElementById('dropdownMenu').classList.add('hidden');
+      state.activeTab = tabName === 'protocolos' ? 'protocolos' : 'triagem';
       
-      const views = ['viewTriagem', 'viewConsultorio', 'viewProtocolos'];
-      views.forEach(v => document.getElementById(v)?.classList.add('hidden'));
-
+      const viewTriagem = document.getElementById('viewTriagem');
+      const viewProtocolos = document.getElementById('viewProtocolos');
       const fab = document.getElementById('btnOpenModalNovo');
-      if (tabName === 'triagem') {
-        document.getElementById('viewTriagem').classList.remove('hidden');
+      const labelBtn = document.getElementById('labelAlternarView');
+      const iconBtn = document.getElementById('iconAlternarView');
+
+      if (state.activeTab === 'protocolos') {
+        viewTriagem?.classList.add('hidden');
+        viewProtocolos?.classList.remove('hidden');
+        if (fab) fab.classList.add('hidden');
+        if (labelBtn) labelBtn.textContent = 'Fila de Triagem';
+        if (iconBtn) {
+          iconBtn.innerHTML = '<path d="M19 12H5M12 19l-7-7 7-7"/>';
+        }
+      } else {
+        viewProtocolos?.classList.add('hidden');
+        viewTriagem?.classList.remove('hidden');
         if (fab) fab.classList.remove('hidden');
-      } else if (tabName === 'consultorio') {
-        document.getElementById('viewConsultorio').classList.remove('hidden');
-        if (fab) fab.classList.add('hidden');
-      } else if (tabName === 'protocolos') {
-        document.getElementById('viewProtocolos').classList.remove('hidden');
-        if (fab) fab.classList.add('hidden');
+        if (labelBtn) labelBtn.textContent = 'Médicos & Protocolos';
+        if (iconBtn) {
+          iconBtn.innerHTML = '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>';
+        }
       }
       renderizarTudo();
     };
@@ -1993,17 +1837,6 @@
       mostrarToast(`🩺 ${p.name} liberado para o consultório do ${p.doctorName}!`);
     };
 
-    window.chamarParaConsultorio = async function(pacienteId) {
-      const p = state.patients.find(pt => pt.id === pacienteId);
-      if (!p) return;
-
-      p.status = 'consultorio_em_atendimento';
-      p.updatedAt = Date.now();
-
-      await enviarPacienteCloudflare(p);
-      mostrarToast(`Paciente ${p.name} chamado para a sala de atendimento!`);
-    };
-
     window.finalizarConsulta = async function(pacienteId) {
       const p = state.patients.find(pt => pt.id === pacienteId);
       if (!p) return;
@@ -2020,14 +1853,10 @@
       if (!p) return;
 
       p.status = 'consultorio_aguardando';
-      if (p.doctorCycle) {
-        p.doctorCycle.hasReturn = false;
-        p.doctorCycle.completedAt = Date.now();
-      }
       p.updatedAt = Date.now();
 
       await enviarPacienteCloudflare(p);
-      mostrarToast(`Retorno concluído! Paciente reenviado para o consultório.`);
+      mostrarToast(`🩺 ${p.name} liberado de volta ao consultório!`);
     };
 
     window.removerPaciente = async function(pacienteId) {
@@ -2038,7 +1867,6 @@
       state.patients = state.patients.filter(pt => pt.id !== pacienteId);
       salvarLocal();
       renderizarTriagem();
-      renderizarConsultorio();
 
       try {
         await fetch(`/api/pacientes?id=${pacienteId}`, { method: 'DELETE' });
@@ -2178,6 +2006,43 @@
       }
     };
 
+    const DIAS_SEMANA = [
+      { day: 1, label: 'Segunda-feira', short: 'Seg' },
+      { day: 2, label: 'Terça-feira', short: 'Ter' },
+      { day: 3, label: 'Quarta-feira', short: 'Qua' },
+      { day: 4, label: 'Quinta-feira', short: 'Qui' },
+      { day: 5, label: 'Sexta-feira', short: 'Sex' },
+      { day: 6, label: 'Sábado', short: 'Sáb' }
+    ];
+
+    function renderizarGradeHorariosMedico(schedule = []) {
+      const grade = document.getElementById('gradeHorariosMedico');
+      if (!grade) return;
+
+      grade.innerHTML = DIAS_SEMANA.map(d => {
+        const daySched = Array.isArray(schedule) ? schedule.find(s => Number(s.dayOfWeek) === d.day) : null;
+        const shifts = daySched?.shifts ? daySched.shifts.map(sh => typeof sh === 'string' ? sh : sh.id) : [];
+        const hasManha = shifts.includes('manha');
+        const hasTarde = shifts.includes('tarde');
+
+        return `
+          <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-xs text-slate-800">${d.label}</span>
+            <div class="flex items-center gap-2">
+              <label class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border cursor-pointer select-none text-xs font-semibold transition ${hasManha ? 'bg-brand-50 border-brand-500 text-brand-700' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-100'}">
+                <input type="checkbox" data-day="${d.day}" data-shift="manha" ${hasManha ? 'checked' : ''} class="w-3.5 h-3.5 text-brand-600 rounded cursor-pointer" onchange="this.parentElement.className = this.checked ? 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg border cursor-pointer select-none text-xs font-semibold transition bg-brand-50 border-brand-500 text-brand-700' : 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg border cursor-pointer select-none text-xs font-semibold transition bg-white border-slate-300 text-slate-600 hover:bg-slate-100'">
+                <span>Manhã</span>
+              </label>
+              <label class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border cursor-pointer select-none text-xs font-semibold transition ${hasTarde ? 'bg-amber-50 border-amber-500 text-amber-800' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-100'}">
+                <input type="checkbox" data-day="${d.day}" data-shift="tarde" ${hasTarde ? 'checked' : ''} class="w-3.5 h-3.5 text-amber-600 rounded cursor-pointer" onchange="this.parentElement.className = this.checked ? 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg border cursor-pointer select-none text-xs font-semibold transition bg-amber-50 border-amber-500 text-amber-800' : 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg border cursor-pointer select-none text-xs font-semibold transition bg-white border-slate-300 text-slate-600 hover:bg-slate-100'">
+                <span>Tarde</span>
+              </label>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     window.abrirModalEditarDadosMedico = function(docId) {
       const d = state.doctors.find(doc => doc.id === docId);
       if (!d) return;
@@ -2188,12 +2053,7 @@
       document.getElementById('editMedicoCRM').value = d.crm || '';
       document.getElementById('editMedicoEspecialidade').value = d.specialty || '';
 
-      const diasCheck = document.querySelectorAll('input[name="editDias"]');
-      const docDias = (d.schedule || []).map(s => s.dayOfWeek);
-      diasCheck.forEach(cb => {
-        cb.checked = docDias.includes(Number(cb.value));
-      });
-
+      renderizarGradeHorariosMedico(d.schedule || []);
       document.getElementById('modalEditarMedico').classList.remove('hidden');
     };
 
@@ -2216,18 +2076,9 @@
       document.getElementById('modalTonometriaRapida').classList.remove('hidden');
     };
 
-    window.abrirModalRetorno = function(pacienteId) {
-      const p = state.patients.find(pt => pt.id === pacienteId);
-      if (!p) return;
-      document.getElementById('retornoPacienteId').value = p.id;
-      document.getElementById('retornoPacienteNome').textContent = p.name;
-      document.getElementById('modalRetornoMedico').classList.remove('hidden');
-    };
-
     function renderizarTudo() {
-      if (state.activeTab === 'triagem') renderizarTriagem();
-      else if (state.activeTab === 'consultorio') renderizarConsultorio();
-      else if (state.activeTab === 'protocolos') renderizarProtocolos();
+      if (state.activeTab === 'protocolos') renderizarProtocolos();
+      else renderizarTriagem();
     }
 
     function loopTimers() {
@@ -2256,19 +2107,9 @@
       carregarLocal();
       await carregarConfigCloudflare();
 
-      // Menu 3 Pontinhos
-      const btnMenuDots = document.getElementById('btnMenuDots');
-      const dropdownMenu = document.getElementById('dropdownMenu');
-      btnMenuDots?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle('hidden');
-      });
-      document.addEventListener('click', () => dropdownMenu?.classList.add('hidden'));
-
-      // Seletor de Médico no Consultório
-      document.getElementById('selectDoctorConsultorio')?.addEventListener('change', (e) => {
-        state.selectedDoctorId = e.target.value;
-        renderizarConsultorio();
+      // Botão de Troca de Página (Triagem <-> Protocolos)
+      document.getElementById('btnAlternarView')?.addEventListener('click', () => {
+        window.navegarPara(state.activeTab === 'triagem' ? 'protocolos' : 'triagem');
       });
 
       // Mudança de Procedimento no Setup
@@ -2406,31 +2247,49 @@
         }
       });
 
-      // Modal Cadastrar Médico
+      // Modal Cadastrar / Editar Médico
       const modalMedico = document.getElementById('modalEditarMedico');
       document.getElementById('btnAbrirModalNovoMedico')?.addEventListener('click', () => {
         document.getElementById('modalMedicoTitulo').textContent = 'Cadastrar Novo Médico';
         document.getElementById('editMedicoId').value = '';
         document.getElementById('formEditarMedico').reset();
+        renderizarGradeHorariosMedico([
+          { dayOfWeek: 1, shifts: ['manha', 'tarde'] },
+          { dayOfWeek: 2, shifts: ['manha', 'tarde'] },
+          { dayOfWeek: 3, shifts: ['manha', 'tarde'] },
+          { dayOfWeek: 4, shifts: ['manha', 'tarde'] },
+          { dayOfWeek: 5, shifts: ['manha', 'tarde'] }
+        ]);
         modalMedico.classList.remove('hidden');
       });
       document.getElementById('btnCloseModalMedico')?.addEventListener('click', () => modalMedico.classList.add('hidden'));
       document.getElementById('btnCancelModalMedico')?.addEventListener('click', () => modalMedico.classList.add('hidden'));
+      modalMedico?.addEventListener('click', (e) => {
+        if (e.target === modalMedico) modalMedico.classList.add('hidden');
+      });
 
-      document.getElementById('formEditarMedico')?.addEventListener('submit', (e) => {
+      document.getElementById('formEditarMedico')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('editMedicoId').value || 'med_' + Date.now();
         const nome = document.getElementById('editMedicoNome').value.trim();
         const crm = document.getElementById('editMedicoCRM').value.trim();
         const esp = document.getElementById('editMedicoEspecialidade').value.trim();
 
-        const diasSelecionados = Array.from(document.querySelectorAll('input[name="editDias"]:checked')).map(c => Number(c.value));
-        const nomesDias = { 1: 'Segunda-feira', 2: 'Terça-feira', 3: 'Quarta-feira', 4: 'Quinta-feira', 5: 'Sexta-feira', 6: 'Sábado' };
-        const schedule = diasSelecionados.map(d => ({
-          dayOfWeek: d,
-          dayName: nomesDias[d] || 'Dia',
-          shifts: [{ id: 'manha', label: 'Manhã' }, { id: 'tarde', label: 'Tarde' }]
-        }));
+        const schedule = [];
+        DIAS_SEMANA.forEach(d => {
+          const shifts = [];
+          const manhaChecked = document.querySelector(`input[data-day="${d.day}"][data-shift="manha"]`)?.checked;
+          const tardeChecked = document.querySelector(`input[data-day="${d.day}"][data-shift="tarde"]`)?.checked;
+          if (manhaChecked) shifts.push('manha');
+          if (tardeChecked) shifts.push('tarde');
+          if (shifts.length > 0) {
+            schedule.push({
+              dayOfWeek: d.day,
+              dayName: d.label,
+              shifts: shifts
+            });
+          }
+        });
 
         const idx = state.doctors.findIndex(d => d.id === id);
         if (idx >= 0) {
@@ -2458,19 +2317,23 @@
         modalMedico.classList.add('hidden');
         renderizarProtocolos();
         mostrarToast('Médico salvo com sucesso!');
+
+        // Sincroniza configuração na nuvem
+        try {
+          await fetch('/api/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ doctors: state.doctors, protocols: state.protocols })
+          });
+        } catch (err) {}
       });
 
       // MODAL NOVO PACIENTE (ENXUTO E INTELIGENTE)
       const modalNovo = document.getElementById('modalNovoPaciente');
-      document.getElementById('btnOpenModalNovo')?.addEventListener('click', () => {
-        sanitizarDadosClinica();
 
-        // 1. Detecta automaticamente médico e turno de hoje
-        const { doctor, shiftId, shiftLabel } = detectarMedicoETurnoAtual();
-        document.getElementById('labelMedicoAutomatico').textContent = doctor ? doctor.name : 'Dr. Álvaro';
-        document.getElementById('labelTurnoAutomatico').textContent = shiftLabel;
-
-        // 2. Preenche os procedimentos daquele médico (GARANTIDO NUNCA EM BRANCO)
+      function preencherProcedimentosNovoPaciente() {
+        const curDocId = (document.getElementById('novoMedicoSelect')?.value) || state.selectedDoctorId || state.doctors[0]?.id;
+        const doctor = state.doctors.find(d => d.id === curDocId) || state.doctors[0];
         let proto = state.protocols[doctor?.protocolId];
         if (!proto || !proto.procedures || !proto.procedures.length) {
           proto = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[doctor?.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
@@ -2482,20 +2345,11 @@
           selectProc.innerHTML = proto.procedures.map(pr => `<option value="${pr.id}">${pr.label}</option>`).join('');
           selectProc.value = proto.procedures[0].id;
         }
-
-        document.getElementById('novoNome').value = '';
-        document.getElementById('novoIdade').value = '';
-        atualizarCamposNovoPaciente();
-
-        modalNovo.classList.remove('hidden');
-        document.getElementById('novoNome').focus();
-      });
-
-      document.getElementById('btnCloseModalNovo')?.addEventListener('click', () => modalNovo.classList.add('hidden'));
-      document.getElementById('btnCancelModalNovo')?.addEventListener('click', () => modalNovo.classList.add('hidden'));
+      }
 
       function atualizarCamposNovoPaciente() {
-        const { doctor } = detectarMedicoETurnoAtual();
+        const curDocId = (document.getElementById('novoMedicoSelect')?.value) || state.selectedDoctorId || state.doctors[0]?.id;
+        const doctor = state.doctors.find(d => d.id === curDocId) || state.doctors[0];
         let proto = state.protocols[doctor?.protocolId];
         if (!proto || !proto.procedures || !proto.procedures.length) {
           proto = JSON.parse(JSON.stringify(DEFAULT_PROTOCOLS[doctor?.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"]));
@@ -2514,17 +2368,76 @@
             campoOlhos.classList.add('hidden');
           }
         }
-
-        // Preview dos passos do procedimento
-        const age = document.getElementById('novoIdade')?.value;
-        const resolved = resolverProcedimento(proc, { age: age });
-        const desc = document.getElementById('previewFluxoPassos');
-        if (desc && resolved.pipeline) {
-          desc.textContent = resolved.pipeline.length > 0
-            ? resolved.pipeline.map(s => s.title).join(' ➔ ')
-            : 'Encaminhamento direto para o consultório médico';
-        }
       }
+
+      document.getElementById('btnOpenModalNovo')?.addEventListener('click', () => {
+        sanitizarDadosClinica();
+
+        // 1. Médicos disponíveis no horário/turno e dia de hoje
+        const { medicos, shiftId } = obterMedicosDisponiveisAgora();
+        const campoMedicoContainer = document.getElementById('campoSelecaoMedicoContainer');
+        const selectMedico = document.getElementById('novoMedicoSelect');
+
+        // Se houver mais de 1 médico disponível, exibe o campo de seleção
+        if (medicos.length > 1) {
+          if (campoMedicoContainer) campoMedicoContainer.classList.remove('hidden');
+          if (selectMedico) {
+            selectMedico.innerHTML = medicos.map(m => {
+              return `<option value="${m.id}">${m.name} (${m.specialty || 'Geral'})</option>`;
+            }).join('');
+
+            if (medicos.some(m => m.id === state.selectedDoctorId)) {
+              selectMedico.value = state.selectedDoctorId;
+            } else {
+              selectMedico.value = medicos[0].id;
+              state.selectedDoctorId = medicos[0].id;
+            }
+          }
+        } else {
+          // Se for só 1 médico (ou fallback), OCULTA o campo de escolha
+          if (campoMedicoContainer) campoMedicoContainer.classList.add('hidden');
+          state.selectedDoctorId = medicos[0]?.id || state.doctors[0]?.id;
+        }
+
+        // 2. Preenche os procedimentos do médico ativo
+        preencherProcedimentosNovoPaciente();
+
+        document.getElementById('novoNome').value = '';
+        document.getElementById('novoIdade').value = '';
+        atualizarCamposNovoPaciente();
+
+        modalNovo.classList.remove('hidden');
+        setTimeout(() => document.getElementById('novoNome')?.focus(), 60);
+      });
+
+      // Fechar Modal Novo Paciente (Botão X, Botão Cancelar e Backdrop)
+      document.getElementById('btnCloseModalNovo')?.addEventListener('click', () => modalNovo.classList.add('hidden'));
+      document.getElementById('btnCancelModalNovo')?.addEventListener('click', () => modalNovo.classList.add('hidden'));
+      modalNovo?.addEventListener('click', (e) => {
+        if (e.target === modalNovo) modalNovo.classList.add('hidden');
+      });
+
+      // Botão Colar Nome da Área de Transferência
+      document.getElementById('btnColarNome')?.addEventListener('click', async () => {
+        try {
+          const texto = await navigator.clipboard.readText();
+          if (texto) {
+            const inputNome = document.getElementById('novoNome');
+            inputNome.value = texto.trim();
+            inputNome.focus();
+            mostrarToast('Nome colado da área de transferência!');
+          }
+        } catch (err) {
+          mostrarToast('Não foi possível acessar a área de transferência.');
+        }
+      });
+
+      // Mudança de Médico no Modal (quando visível)
+      document.getElementById('novoMedicoSelect')?.addEventListener('change', (e) => {
+        state.selectedDoctorId = e.target.value;
+        preencherProcedimentosNovoPaciente();
+        atualizarCamposNovoPaciente();
+      });
 
       document.getElementById('novoProcedimento')?.addEventListener('change', atualizarCamposNovoPaciente);
       document.getElementById('novoIdade')?.addEventListener('input', atualizarCamposNovoPaciente);
@@ -2533,10 +2446,18 @@
       document.getElementById('formNovoPaciente')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const nome = document.getElementById('novoNome').value.trim();
+        if (!nome) return;
+
         const idadeRaw = document.getElementById('novoIdade').value;
         const idade = idadeRaw !== '' ? Number(idadeRaw) : null;
 
-        const { doctor, shiftId } = detectarMedicoETurnoAtual();
+        const { medicos, shiftId } = obterMedicosDisponiveisAgora();
+        const curDocId = (medicos.length > 1 ? document.getElementById('novoMedicoSelect')?.value : null)
+          || state.selectedDoctorId
+          || medicos[0]?.id
+          || state.doctors[0]?.id;
+        const doctor = state.doctors.find(d => d.id === curDocId) || state.doctors[0];
+
         const proto = state.protocols[doctor.protocolId] || DEFAULT_PROTOCOLS["proto_alvaro"];
         const procId = document.getElementById('novoProcedimento').value;
         const proc = proto?.procedures?.find(pr => pr.id === procId) || proto?.procedures?.[0];
@@ -2564,6 +2485,8 @@
         };
 
         state.patients.unshift(novoPac);
+        salvarLocal();
+        renderizarTriagem();
         await enviarPacienteCloudflare(novoPac);
 
         modalNovo.classList.add('hidden');
@@ -2571,33 +2494,17 @@
         mostrarToast(`Paciente ${nome} adicionado!`);
       });
 
-      // Retorno do Médico
-      document.getElementById('formRetornoMedico')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const pacId = document.getElementById('retornoPacienteId').value;
-        const checkboxes = document.querySelectorAll('input[name="retornoExame"]:checked');
-        const exames = Array.from(checkboxes).map(c => c.value);
-        const obs = document.getElementById('retornoObservacoes').value.trim();
-
-        const p = state.patients.find(pt => pt.id === pacId);
-        if (p) {
-          p.status = 'retorno_triagem';
-          p.doctorCycle = {
-            hasReturn: true,
-            returnReason: exames.join(', ') || 'Exames adicionais solicitados',
-            requestedExtras: exames,
-            notes: obs,
-            requestedAt: Date.now()
-          };
-          p.updatedAt = Date.now();
-
-          await enviarPacienteCloudflare(p);
-          document.getElementById('modalRetornoMedico').classList.add('hidden');
-          mostrarToast('Solicitação de retorno enviada para a triagem!');
+      // Tecla Esc fecha qualquer modal aberto
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          modalNovo.classList.add('hidden');
+          modalMedico.classList.add('hidden');
+          document.getElementById('modalEditarEtapa')?.classList.add('hidden');
+          document.getElementById('modalProcedimento')?.classList.add('hidden');
+          document.getElementById('modalTonometriaRapida')?.classList.add('hidden');
+          document.getElementById('modalConfirmarLimpar')?.classList.add('hidden');
         }
       });
-      document.getElementById('btnCloseModalRetorno')?.addEventListener('click', () => document.getElementById('modalRetornoMedico').classList.add('hidden'));
-      document.getElementById('btnCancelModalRetorno')?.addEventListener('click', () => document.getElementById('modalRetornoMedico').classList.add('hidden'));
 
       // Tonometria
       document.getElementById('formTonometriaRapida')?.addEventListener('submit', async (e) => {
